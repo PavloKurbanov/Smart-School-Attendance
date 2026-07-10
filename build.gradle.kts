@@ -30,6 +30,10 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+// Mapper
+    implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor ("'org.mapstruct:mapstruct-processor:1.6.3")
+
 // JPA Static Metamodel
     annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.6.0.Final")
     implementation("jakarta.persistence:jakarta.persistence-api")

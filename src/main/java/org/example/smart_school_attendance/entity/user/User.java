@@ -38,6 +38,10 @@ public class User {
     private String email;
 
     @NotBlank
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -59,11 +63,12 @@ public class User {
     @Column(name = "update_date", nullable = false)
     private LocalDateTime updateDate;
 
-    public User(String firstName, String lastName, int age, String email, String password, Role role) {
+    public User(String firstName, String lastName, int age, String email, String phoneNumber, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.role = role;
     }

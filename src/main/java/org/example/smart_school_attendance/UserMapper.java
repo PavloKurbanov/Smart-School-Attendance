@@ -1,0 +1,10 @@
+package org.example.smart_school_attendance;
+
+import org.example.smart_school_attendance.dto.UserDetailsResponseDTO;
+import org.example.smart_school_attendance.entity.user.User;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    UserDetailsResponseDTO toUserDetailsResponseDTO(User user);
+}

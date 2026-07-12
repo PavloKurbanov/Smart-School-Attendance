@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDetailsResponseDTO create(CreateUserRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Create user request can't be null");
@@ -69,20 +71,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
-        return null;
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable can't be null");
+        }
+        return userRepository.findAll(pageable)
+                .map(userMapper::toUserListResponseDTO);
     }
 
-    private UserDetailsResponseDTO mapToDetails(User user) {
-        return new UserDetailsResponseDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getAge(),
-                user.getEmail(),
-                user.getPhoneNumber(),
-                user.getRole(),
-                user.getCreateDate(),
-                user.getUpdateDate()
-        );
+    @Override
+    @Transactional
+    public void update(User user) {
+        if(user == null) {
+            throw new IllegalArgumentException("User can't be null");
+        }
+
+        if(user.getId() == null || user.getId() <= 0) {
+            throw new IllegalArgumentException("User ID can't be null");
+        }
+
+        log.debug("Attempting to update user with ID: {}", user.getId());
+        if (!userRepository.existsById(user.getId())) {
+            throw new IllegalArgumentException("User with ID: " + user.getId() + " not found");
+        }
+        userRepository.save(user);
+        log.info("User with ID: {} successfully updated", user.getId());
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        return false;
+    }
+
+    @Override
+    public boolean existByPhone(String phoneNumber) {
+        return false;
+    }
+
+    @Override
+    public User findByEntityId(Long id) {
+        return null;
     }
 }

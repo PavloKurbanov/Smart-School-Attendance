@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
     UserDetailsResponseDTO create(CreateUserRequestDTO request);
 
-    User update(User user);
+    void update(User user);
 
     User findById(Long id);
 

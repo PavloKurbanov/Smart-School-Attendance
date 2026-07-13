@@ -20,5 +20,5 @@ public interface UserService {
 
     boolean existByPhone(String phoneNumber);
 
-    User findByEntityId(Long id);
+    UserDetailsResponseDTO findByEntityId(Long id);
 }

@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("User ID can't be null or < 0");
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
         if (pageable == null) {
             throw new IllegalArgumentException("Pageable can't be null");
@@ -81,11 +83,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(User user) {
-        if(user == null) {
+        if (user == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        if(user.getId() == null || user.getId() <= 0) {
+        if (user.getId() == null || user.getId() <= 0) {
             throw new IllegalArgumentException("User ID can't be null");
         }
 
@@ -98,17 +100,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existByEmail(String email) {
-        return false;
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email can't be null or empty");
+        }
+        return userRepository.existsByEmail(email);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existByPhone(String phoneNumber) {
-        return false;
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            throw new IllegalArgumentException("Phone number can't be null or empty");
+        }
+        return userRepository.existByPhoneNumber(phoneNumber);
     }
 
     @Override
-    public User findByEntityId(Long id) {
-        return null;
+    @Transactional(readOnly = true)
+    public UserDetailsResponseDTO findByEntityId(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("User ID can't be null");
+        }
+        log.debug("Attempting to find user with ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+        return userMapper.toUserDetailsResponseDTO(user);
     }
 }

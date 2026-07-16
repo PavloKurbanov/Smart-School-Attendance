@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.dto;
+package org.example.smart_school_attendance.dto.user.response;
 
 import org.example.smart_school_attendance.entity.user.Role;
 

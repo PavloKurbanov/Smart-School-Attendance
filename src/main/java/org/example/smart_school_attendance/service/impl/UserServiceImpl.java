@@ -2,9 +2,9 @@ package org.example.smart_school_attendance.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.UserMapper;
-import org.example.smart_school_attendance.dto.CreateUserRequestDTO;
-import org.example.smart_school_attendance.dto.UserDetailsResponseDTO;
-import org.example.smart_school_attendance.dto.UserListResponseDTO;
+import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
+import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.service.UserService;

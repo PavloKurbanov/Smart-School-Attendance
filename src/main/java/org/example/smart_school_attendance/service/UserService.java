@@ -1,8 +1,8 @@
 package org.example.smart_school_attendance.service;
 
-import org.example.smart_school_attendance.dto.CreateUserRequestDTO;
-import org.example.smart_school_attendance.dto.UserDetailsResponseDTO;
-import org.example.smart_school_attendance.dto.UserListResponseDTO;
+import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
+import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

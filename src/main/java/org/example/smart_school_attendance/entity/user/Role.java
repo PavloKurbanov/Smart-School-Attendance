@@ -5,5 +5,6 @@ public enum Role {
     CHILD,
     TEACHER,
     SCHOOL_ADMIN,
-    SYSTEM_ADMIN
+    SYSTEM_ADMIN,
+    PENDING
 }

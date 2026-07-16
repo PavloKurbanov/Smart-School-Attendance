@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.dto;
+package org.example.smart_school_attendance.dto.user.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;

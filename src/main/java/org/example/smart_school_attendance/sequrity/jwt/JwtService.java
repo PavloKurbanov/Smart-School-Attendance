@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.sequrity;
+package org.example.smart_school_attendance.sequrity.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -31,7 +31,7 @@ public class JwtService {
         return claims.get(userName).toString();
     }
 
-    public String generateToken(User user) {
+    public String generateTokenUser(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))

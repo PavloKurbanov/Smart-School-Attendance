@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.sequrity;
+package org.example.smart_school_attendance.sequrity.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,12 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.example.smart_school_attendance.sequrity.service.UsersDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,19 +20,17 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService = new JwtService();
-    private final ClientUserDetailsService clientUserDetailsService;
-    private final StaffUserDetailsService staffUserDetailsService;
+    private final UsersDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
-            ClientUserDetailsService clientUserDetailsService,
-            StaffUserDetailsService staffUserDetailsService) {
-
-        this.clientUserDetailsService = clientUserDetailsService;
-        this.staffUserDetailsService = staffUserDetailsService;
+            UsersDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -77,10 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UserDetailsService selectUserDetailsService(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        if (uri.contains("/api/v1/clients/")) {
-            return clientUserDetailsService;
+        if (uri.contains("/api/v1/users/")) {
+            return userDetailsService;
         }
-        return staffUserDetailsService;
+        return userDetailsService;
     }
 }
 

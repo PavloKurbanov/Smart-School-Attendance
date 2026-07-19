@@ -2,6 +2,7 @@ package org.example.smart_school_attendance.sequrity;
 
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class SecurityUser implements UserDetails {
     private final User user;
     private final Long userId;

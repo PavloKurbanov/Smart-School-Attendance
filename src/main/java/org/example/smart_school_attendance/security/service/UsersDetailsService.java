@@ -1,8 +1,8 @@
-package org.example.smart_school_attendance.sequrity.service;
+package org.example.smart_school_attendance.security.service;
 
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.repository.UserRepository;
-import org.example.smart_school_attendance.sequrity.SecurityUser;
+import org.example.smart_school_attendance.security.SecurityUser;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.sequrity.jwt;
+package org.example.smart_school_attendance.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -37,7 +37,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .addClaims(Map.of("userId", user.getId(), "email", user.getEmail(), "ROLE", "ROLE_USER"))
+                .addClaims(Map.of("userId", user.getId(), "email", user.getEmail()))
                 .compact();
     }
 

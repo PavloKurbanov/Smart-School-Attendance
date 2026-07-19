@@ -1,13 +1,12 @@
-package org.example.smart_school_attendance.service.impl;
+package org.example.smart_school_attendance.service.user.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.UserMapper;
 import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
-import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
-import org.example.smart_school_attendance.service.UserService;
+import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDetailsResponseDTO create(CreateUserRequestDTO request) {
+    public User create(CreateUserRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 request.role()
         ));
         log.info("User with email: {}, phone number: {} successfully created with ID: {}", request.email(), request.phoneNumber(), user.getId());
-        return userMapper.toUserDetailsResponseDTO(user);
+        return user;
     }
 
     @Override
@@ -68,6 +67,16 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User findByEmail(String email) {
+        if(email == null || email.isBlank()){
+            throw new IllegalArgumentException("Email can't be null or blank");
+        }
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with email: " + email + " not found"));
     }
 
     @Override
@@ -115,17 +124,5 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Phone number can't be null or empty");
         }
         return userRepository.existByPhoneNumber(phoneNumber);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetailsResponseDTO findByEntityId(Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("User ID can't be null");
-        }
-        log.debug("Attempting to find user with ID: {}", id);
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
-        return userMapper.toUserDetailsResponseDTO(user);
     }
 }

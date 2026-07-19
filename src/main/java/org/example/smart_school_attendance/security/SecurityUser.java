@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.sequrity;
+package org.example.smart_school_attendance.security;
 
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;

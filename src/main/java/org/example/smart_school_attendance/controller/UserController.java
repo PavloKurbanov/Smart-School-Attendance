@@ -1,0 +1,53 @@
+package org.example.smart_school_attendance.controller;
+
+import jakarta.validation.Valid;
+import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
+import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
+import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.mapper.UserMapper;
+import org.example.smart_school_attendance.service.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/users")
+public class UserController {
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+    @Autowired
+    public UserController(UserService userService, UserMapper userMapper) {
+        this.userService = userService;
+        this.userMapper = userMapper;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public UserDetailsResponseDTO create(
+            @Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
+        User user = userService.create(createUserRequestDTO);
+        return userMapper.toUserDetailsResponseDTO(user);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public UserDetailsResponseDTO findById(
+            @PathVariable  Long id) {
+        User user = userService.findById(id);
+        return userMapper.toUserDetailsResponseDTO(user);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public Page<UserListResponseDTO> findAll(Pageable pageable) {
+        return userService.findAll(pageable);
+    }
+}

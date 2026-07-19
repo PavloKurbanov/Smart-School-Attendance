@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance;
+package org.example.smart_school_attendance.mapper;
 
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;

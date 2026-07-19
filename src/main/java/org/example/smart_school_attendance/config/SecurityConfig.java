@@ -1,9 +1,9 @@
 package org.example.smart_school_attendance.config;
 
 import org.example.smart_school_attendance.repository.UserRepository;
-import org.example.smart_school_attendance.sequrity.jwt.JwtAuthenticationFilter;
-import org.example.smart_school_attendance.sequrity.jwt.JwtService;
-import org.example.smart_school_attendance.sequrity.service.UsersDetailsService;
+import org.example.smart_school_attendance.security.jwt.JwtAuthenticationFilter;
+import org.example.smart_school_attendance.security.jwt.JwtService;
+import org.example.smart_school_attendance.security.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +44,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(UsersDetailsService usersDetailsService) {
         return new JwtAuthenticationFilter(usersDetailsService);
     }
@@ -54,7 +55,7 @@ public class SecurityConfig {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("api/v1/users/**")
+                .securityMatcher("/api/v1/users/**")
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests( auth -> auth

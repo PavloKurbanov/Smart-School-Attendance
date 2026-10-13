@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
@@ -35,12 +35,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtService jwtService(){
+    public JwtService jwtService() {
         return new JwtService();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -51,32 +51,39 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain  securityFilterChain(HttpSecurity http, JwtAuthenticationFilter filter) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationFilter filter) throws Exception {
+
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/v1/users/**")
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .authorizeHttpRequests( auth -> auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/login").permitAll()
                         .requestMatchers("/api/v1/users/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authenticationProvider(userAuthenticationProvider())
+                .authenticationProvider(userAuthenticationProvider(userDetailsService())) // ТУТ ПОМИЛКА
                 .addFilterBefore(filter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
 
+    //ТУТ ТОЖЕ ЯКАСЬ ПЕЗДА!
     @Bean
-    public DaoAuthenticationProvider userAuthenticationProvider() {
-        return new DaoAuthenticationProvider(passwordEncoder);
+    public DaoAuthenticationProvider userAuthenticationProvider(UsersDetailsService usersDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(usersDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UsersDetailsService userDetailsService() {
         return new UsersDetailsService(userRepository);
     }
 }

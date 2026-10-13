@@ -6,17 +6,19 @@ import org.example.smart_school_attendance.entity.school.classRoom.ClassRoom;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "child_details")
 public class ChildDetails {
+
     @Id
     private Long id;
 
-    @OneToOne
     @MapsId
+    @OneToOne
     @JoinColumn(name = "id")
     private User child;
 
@@ -31,8 +33,13 @@ public class ChildDetails {
     @Enumerated(EnumType.STRING)
     private ChildLocationStatus status;
 
-    @ManyToMany(mappedBy = "id")
-    private List<User> parents;
+    @ManyToMany
+    @JoinTable(
+            name = "child_parents",
+            joinColumns = @JoinColumn(name = "child_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
+    )
+    private List<User> parents = new ArrayList<>();
 
     public ChildDetails(Long id, User child, School school, ClassRoom classRoom, List<User> parents) {
         this.id = id;

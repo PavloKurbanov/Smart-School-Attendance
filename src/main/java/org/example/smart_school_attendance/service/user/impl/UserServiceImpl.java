@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email " + request.email() + " already exists");
         }
 
-        if (userRepository.existByPhoneNumber(request.phoneNumber())) {
+        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
             throw new IllegalArgumentException("Phone number " + request.phoneNumber() + " already exists");
         }
 
@@ -123,6 +123,6 @@ public class UserServiceImpl implements UserService {
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             throw new IllegalArgumentException("Phone number can't be null or empty");
         }
-        return userRepository.existByPhoneNumber(phoneNumber);
+        return userRepository.existsByPhoneNumber(phoneNumber);
     }
 }

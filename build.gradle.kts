@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.annotationProcessor
+import org.gradle.kotlin.dsl.testAnnotationProcessor
+
 plugins {
     java
     id("org.springframework.boot") version "3.3.5"
@@ -10,7 +13,7 @@ description = "Smart School Attendance"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -39,8 +42,13 @@ dependencies {
     annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.5.3.Final")
 
     // Lombok
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+
+    compileOnly("org.projectlombok:lombok:1.18.48")
+    annotationProcessor("org.projectlombok:lombok:1.18.48")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.48")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.48")
+
 
     // Lombok + MapStruct
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")

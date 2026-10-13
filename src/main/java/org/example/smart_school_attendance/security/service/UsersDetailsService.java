@@ -3,12 +3,20 @@ package org.example.smart_school_attendance.security.service;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.security.SecurityUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
-public record UsersDetailsService(UserRepository userRepository) implements UserDetailsService {
+public class UsersDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UsersDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional(readOnly = true)

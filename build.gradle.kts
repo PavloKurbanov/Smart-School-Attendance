@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.1.0"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "3.3.5"
+    id("io.spring.dependency-management") version "1.1.6"
 }
 
 group = "org.example"
@@ -19,45 +19,41 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
-// JWT Dependencies (Виправлено: додано повний шлях io.jsonwebtoken)
+    // JWT
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-// Mapper
+    // MapStruct
     implementation("org.mapstruct:mapstruct:1.6.3")
-    annotationProcessor ("'org.mapstruct:mapstruct-processor:1.6.3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
-// JPA Static Metamodel
-    annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.6.0.Final")
-    implementation("jakarta.persistence:jakarta.persistence-api")
+    // JPA Static Metamodel (узгоджено з Hibernate у Spring Boot 3.3)
+    annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.5.3.Final")
 
-// Logging Dependencies
-    implementation("org.slf4j:slf4j-api")
-    implementation("ch.qos.logback:logback-classic")
-
-// Lombok
+    // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
 
-// Database Driver
+    // Lombok + MapStruct
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+
+    // Database
     runtimeOnly("com.mysql:mysql-connector-j")
 
-// Testing Dependencies
-    testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-security-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    // Testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("com.mysql:mysql-connector-j:9.0.0")
 }
 
 tasks.withType<Test> {

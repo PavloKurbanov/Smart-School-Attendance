@@ -1,4 +1,4 @@
-﻿package org.example.smart_school_attendance.entity.user;
+package org.example.smart_school_attendance.entity.user;
 
 public enum Role {
     PARENT,

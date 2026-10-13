@@ -17,13 +17,15 @@ public class ClassRoom {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classRoom")
     private List<ChildDetails> children;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "school_id")
     private School school;
 
     public ClassRoom(String name, List<ChildDetails> children, User teacher, School school) {

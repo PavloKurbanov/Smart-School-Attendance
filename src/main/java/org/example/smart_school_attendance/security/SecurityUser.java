@@ -2,8 +2,6 @@ package org.example.smart_school_attendance.security;
 
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
-import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
+
 public class SecurityUser implements UserDetails {
     private final User user;
     private final Long userId;
@@ -34,7 +32,7 @@ public class SecurityUser implements UserDetails {
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return user.getPassword();
     }
 

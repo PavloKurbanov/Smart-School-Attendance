@@ -17,18 +17,18 @@ public class JwtService {
     private static final String SECRET_KEY = "9a72df6554c123456789abcdef0123456789abcdef0123456789abcdef012345";
     public static final long EXPIRATION_TIME = 86400000;
 
-    public String extractUsername(String token) {
+    public String extractUserName(String token) {
         return extractClaim(token, null);
     }
 
-    public String extractClaim(String token, String userName) {
+    public String extractClaim(String token, String claimName) {
         JwtParser jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
         Claims claims = jwtParser.parseClaimsJws(token).getBody();
 
-        if (userName == null) {
+        if (claimName == null) {
             return claims.getSubject();
         }
-        return claims.get(userName).toString();
+        return claims.get(claimName).toString();
     }
 
     public String generateTokenUser(User user) {
@@ -42,7 +42,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractUserName(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 

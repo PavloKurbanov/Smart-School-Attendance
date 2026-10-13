@@ -13,18 +13,22 @@ import java.util.List;
 @Table(name = "child_details")
 public class ChildDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
     private User child;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "school_id")
     private School school;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "class_room_id")
     private ClassRoom classRoom;
 
+    @Enumerated(EnumType.STRING)
     private ChildLocationStatus status;
 
     @ManyToMany(mappedBy = "id")

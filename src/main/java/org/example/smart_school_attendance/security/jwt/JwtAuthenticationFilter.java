@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
         log.info("JWT Header {}", jwt);
-        userEmail = jwtService.extractUsername(jwt);
+        userEmail = jwtService.extractUserName(jwt);
         log.info("User Email {}", userEmail);
 
         // 2. Якщо email успішно витягнуто і в поточному потоці запиту користувач ще не авторизований

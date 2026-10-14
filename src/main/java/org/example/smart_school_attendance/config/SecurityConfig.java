@@ -16,9 +16,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -50,7 +50,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(1)
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter filter) throws Exception {
@@ -67,13 +66,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authenticationProvider(userAuthenticationProvider(userDetailsService())) // ТУТ ПОМИЛКА
-                .addFilterBefore(filter, JwtAuthenticationFilter.class);
+                .authenticationProvider(userAuthenticationProvider(userDetailsService()))
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    //ТУТ ТОЖЕ ЯКАСЬ ПЕЗДА!
     @Bean
     public DaoAuthenticationProvider userAuthenticationProvider(UsersDetailsService usersDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

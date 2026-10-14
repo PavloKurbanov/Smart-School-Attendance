@@ -1,5 +1,6 @@
 package org.example.smart_school_attendance.service.user.impl;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Builder
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -51,8 +53,8 @@ public class UserServiceImpl implements UserService {
                 request.lastName(),
                 request.age(),
                 request.email(),
-                encode,
                 request.phoneNumber(),
+                encode,
                 request.role()
         ));
         log.info("User with email: {}, phone number: {} successfully created with ID: {}", request.email(), request.phoneNumber(), user.getId());

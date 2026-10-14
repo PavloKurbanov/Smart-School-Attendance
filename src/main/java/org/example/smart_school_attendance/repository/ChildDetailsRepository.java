@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ChildDetailsRepository extends JpaRepository<ChildDetails, Long> {
 
-    @Query("SELECT c.parents FROM ChildDetails c WHERE c.email = :email")
-    List<User> findParentsByChildEmail(@Param("email") String email);
+//    @Query("SELECT c.parents FROM ChildDetails c WHERE c.email = :email")
+//    List<User> findParentsByChildEmail(@Param("email") String email);
 }

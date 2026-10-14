@@ -17,11 +17,9 @@ public record CreateUserRequestDTO(
         @Email
         String email,
         @NotBlank
-        String phoneNumber,
-        @NotBlank
         String password,
         @NotBlank
-        String confirmPassword,
+        String phoneNumber,
         @NotNull
         Role role
 ) {

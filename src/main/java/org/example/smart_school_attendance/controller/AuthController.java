@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class AuthController {
     private final AuthService authService;
 
@@ -24,7 +24,7 @@ public class AuthController {
         return authService.login(requestDTO);
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/register")
     public String registration(
             @RequestBody CreateUserRequestDTO requestDTO) {
         return authService.registration(requestDTO);

@@ -2,7 +2,7 @@ package org.example.smart_school_attendance.entity.school.classRoom;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.example.smart_school_attendance.entity.child.ChildDetails;
+import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.User;
 

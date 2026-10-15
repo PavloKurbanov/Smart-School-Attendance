@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.entity.child;
+package org.example.smart_school_attendance.entity.childDetails;
 
 import jakarta.persistence.*;
 import lombok.Data;

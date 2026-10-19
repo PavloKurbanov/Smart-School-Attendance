@@ -2,8 +2,10 @@ package org.example.smart_school_attendance.service.user.impl;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
+import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
@@ -32,7 +34,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(CreateUserRequestDTO request) {
+    public User create(PublicRegisterRequestDTO request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Create user request can't be null");
+        }
+        log.debug("Attempting to create new user with email: {}, phone number: {}", request.email(), request.phoneNumber());
+
+        if (userRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email " + request.email() + " already exists");
+        }
+
+        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
+            throw new IllegalArgumentException("Phone number " + request.phoneNumber() + " already exists");
+        }
+
+        String encode = passwordEncoder.encode(request.password());
+
+        User user = userRepository.save(new User(
+                request.firstName(),
+                request.lastName(),
+                request.age(),
+                request.email(),
+                request.phoneNumber(),
+                encode,
+                Role.PARENT
+        ));
+        log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
+                , request.email(), request.phoneNumber(), user.getRole(), user.getId());
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public User createUserByAdmin(AdminCreateUserRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
@@ -57,7 +91,8 @@ public class UserServiceImpl implements UserService {
                 encode,
                 request.role()
         ));
-        log.info("User with email: {}, phone number: {} successfully created with ID: {}", request.email(), request.phoneNumber(), user.getId());
+        log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
+                , request.email(), request.phoneNumber(), user.getRole(), user.getId());
         return user;
     }
 

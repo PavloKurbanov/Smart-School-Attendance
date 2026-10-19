@@ -2,7 +2,8 @@ package org.example.smart_school_attendance.service.auth.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.login.LoginRequestDTO;
-import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.security.jwt.JwtService;
 import org.example.smart_school_attendance.service.auth.AuthService;
@@ -48,15 +49,31 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public String registration(CreateUserRequestDTO createUserRequestDTO) {
-        if (createUserRequestDTO == null) {
+    public String registration(PublicRegisterRequestDTO publicRegisterRequestDTO) {
+        if (publicRegisterRequestDTO == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
-        log.debug("Attempting to register Role: {} with email: {}, phone number: {}", createUserRequestDTO.role().name().toUpperCase(), createUserRequestDTO.email()
-                , createUserRequestDTO.phoneNumber());
+        log.debug("Attempting to register with email: {}, phone number: {}", publicRegisterRequestDTO.email()
+                , publicRegisterRequestDTO.phoneNumber());
 
-        User user = userService.create(createUserRequestDTO);
+        User user = userService.create(publicRegisterRequestDTO);
         log.info("User with email: {}, ID: {}, Role: {} successfully registered", user.getEmail(), user.getId(), user.getRole().name().toUpperCase());
         return jwtService.generateTokenUser(user);
     }
+
+    @Override
+    @Transactional
+    public String registrationByAdmin(AdminCreateUserRequestDTO requestDTO) {
+        if (requestDTO == null) {
+            throw new IllegalArgumentException("Create user request can't be null");
+        }
+        log.debug("Attempting to register Role: {} with email: {}, phone number: {}", requestDTO.role().name().toUpperCase(), requestDTO.email()
+                , requestDTO.phoneNumber());
+
+        User user = userService.createUserByAdmin(requestDTO);
+        log.info("User with email: {}, ID: {}, Role: {} successfully registered", user.getEmail(), user.getId(), user.getRole().name().toUpperCase());
+        return jwtService.generateTokenUser(user);
+    }
+
+
 }

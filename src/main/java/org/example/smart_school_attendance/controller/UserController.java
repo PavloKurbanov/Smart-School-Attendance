@@ -1,7 +1,7 @@
 package org.example.smart_school_attendance.controller;
 
 import jakarta.validation.Valid;
-import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
@@ -30,8 +30,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public UserDetailsResponseDTO create(
-            @Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
-        User user = userService.create(createUserRequestDTO);
+            @Valid @RequestBody PublicRegisterRequestDTO publicRegisterRequestDTO) {
+        User user = userService.create(publicRegisterRequestDTO);
         return userMapper.toUserDetailsResponseDTO(user);
     }
 

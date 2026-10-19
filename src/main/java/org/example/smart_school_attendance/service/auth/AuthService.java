@@ -1,10 +1,13 @@
 package org.example.smart_school_attendance.service.auth;
 
 import org.example.smart_school_attendance.dto.login.LoginRequestDTO;
-import org.example.smart_school_attendance.dto.user.request.CreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 
 public interface AuthService {
     String login(LoginRequestDTO request);
 
-    String registration(CreateUserRequestDTO request);
+    String registration(PublicRegisterRequestDTO request);
+
+    String registrationByAdmin(AdminCreateUserRequestDTO requestDTO);
 }

@@ -74,6 +74,4 @@ public class AuthServiceImpl implements AuthService {
         log.info("User with email: {}, ID: {}, Role: {} successfully registered", user.getEmail(), user.getId(), user.getRole().name().toUpperCase());
         return jwtService.generateTokenUser(user);
     }
-
-
 }

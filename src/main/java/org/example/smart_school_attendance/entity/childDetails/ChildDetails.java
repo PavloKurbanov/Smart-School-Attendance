@@ -31,7 +31,7 @@ public class ChildDetails {
     private ClassRoom classRoom;
 
     @Enumerated(EnumType.STRING)
-    private ChildLocationStatus status;
+    private ChildLocationStatus status = ChildLocationStatus.INSIDE_SCHOOL;
 
     @ManyToMany
     @JoinTable(
@@ -41,8 +41,7 @@ public class ChildDetails {
     )
     private List<User> parents = new ArrayList<>();
 
-    public ChildDetails(Long id, User child, School school, ClassRoom classRoom, List<User> parents) {
-        this.id = id;
+    public ChildDetails(User child, School school, ClassRoom classRoom, List<User> parents) {
         this.child = child;
         this.school = school;
         this.classRoom = classRoom;

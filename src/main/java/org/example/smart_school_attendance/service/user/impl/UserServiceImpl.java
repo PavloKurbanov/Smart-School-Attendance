@@ -1,6 +1,5 @@
 package org.example.smart_school_attendance.service.user.impl;
 
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Builder
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

@@ -23,9 +23,9 @@ public class School {
 
     private Double longitude;
 
-    private int radius;
+    private Integer radius;
 
-    public School(String name, String address, String phoneNumber, String email, Double latitude, Double longitude, int radius) {
+    public School(String name, String address, String phoneNumber, String email, Double latitude, Double longitude, Integer radius) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;

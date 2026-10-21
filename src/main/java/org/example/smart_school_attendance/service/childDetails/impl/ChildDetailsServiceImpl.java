@@ -1,9 +1,10 @@
-﻿package org.example.smart_school_attendance.service.childDetails;
+﻿package org.example.smart_school_attendance.service.childDetails.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.childDetails.CreateChildDetailsDTO;
 import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.repository.ChildDetailsRepository;
+import org.example.smart_school_attendance.service.childDetails.ChildDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

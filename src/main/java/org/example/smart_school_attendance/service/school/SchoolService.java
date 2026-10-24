@@ -1,17 +1,19 @@
 package org.example.smart_school_attendance.service.school;
 
+import org.example.smart_school_attendance.dto.school.request.SchoolCreateDetailsDTO;
+import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResponseDTO;
 import org.example.smart_school_attendance.entity.school.School;
 
 public interface SchoolService {
-    School create();
+    School create(SchoolCreateDetailsDTO responseDTO);
 
     School update(School school);
 
-    School findById(Long id);
+    SchoolDetailsResponseDTO findById(Long id);
 
-    School findByName(String name);
+    SchoolDetailsResponseDTO findByName(String name);
 
-    School findByEmail(String email);
+    SchoolDetailsResponseDTO findByEmail(String email);
 
-    School findByPhoneNumber(String phoneNumber);
+    SchoolDetailsResponseDTO findByPhoneNumber(String phoneNumber);
 }

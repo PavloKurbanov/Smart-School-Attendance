@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.dto.school;
+package org.example.smart_school_attendance.dto.school.request;
 
 import jakarta.validation.constraints.*;
 

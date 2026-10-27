@@ -31,7 +31,9 @@ public class UserController {
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public UserDetailsResponseDTO create(
             @Valid @RequestBody PublicRegisterRequestDTO publicRegisterRequestDTO) {
-        User user = userService.create(publicRegisterRequestDTO);
+        // Змінити так само як в методі FindById
+
+//        User user = userService.create(publicRegisterRequestDTO);
         return userMapper.toUserDetailsResponseDTO(user);
     }
 
@@ -39,9 +41,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public UserDetailsResponseDTO findById(
-            @PathVariable  Long id) {
-        User user = userService.findById(id);
-        return userMapper.toUserDetailsResponseDTO(user);
+            @PathVariable Long id) {
+        return userService.findById(id);
     }
 
     @GetMapping

@@ -2,6 +2,8 @@ package org.example.smart_school_attendance.dto.school.request;
 
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDateTime;
+
 public record SchoolCreateDetailsDTO(
 
         @NotBlank(message = "School name is required")
@@ -39,6 +41,8 @@ public record SchoolCreateDetailsDTO(
 
         @NotNull(message = "Radius is required")
         @Min(value = 1, message = "Radius must be greater than 0 meters")
-        Integer radius
+        Integer radius,
+        LocalDateTime createDate,
+        LocalDateTime updateDate
 ) {
 }

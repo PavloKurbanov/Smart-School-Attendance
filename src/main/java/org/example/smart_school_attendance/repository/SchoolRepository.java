@@ -22,6 +22,4 @@ public interface SchoolRepository extends JpaRepository<School, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhoneNumber(String phoneNumber);
-
-    boolean existsByName(String name);
 }

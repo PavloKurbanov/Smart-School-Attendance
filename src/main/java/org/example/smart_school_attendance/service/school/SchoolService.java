@@ -7,7 +7,7 @@ import org.example.smart_school_attendance.entity.school.School;
 public interface SchoolService {
     School create(SchoolCreateDetailsDTO responseDTO);
 
-    School update(School school);
+    void update(School school);
 
     SchoolDetailsResponseDTO findById(Long id);
 

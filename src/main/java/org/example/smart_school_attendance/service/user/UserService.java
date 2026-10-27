@@ -2,6 +2,7 @@ package org.example.smart_school_attendance.service.user;
 
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,9 @@ public interface UserService {
 
     void update(User user);
 
-    User findById(Long id);
+    UserDetailsResponseDTO findById(Long id);
 
-    User findByEmail(String email);
+    UserDetailsResponseDTO findByEmail(String email);
 
     Page<UserListResponseDTO> findAll(Pageable pageable);
 

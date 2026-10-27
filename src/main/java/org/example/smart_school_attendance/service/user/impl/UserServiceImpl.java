@@ -3,6 +3,7 @@ package org.example.smart_school_attendance.service.user.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
@@ -96,21 +97,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User findById(Long id) {
+    public UserDetailsResponseDTO findById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("User ID can't be null or < 0");
         }
-        return userRepository.findById(id)
+        return userRepository.findById(id).map(userMapper::toUserDetailsResponseDTO)
                 .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public User findByEmail(String email) {
-        if(email == null || email.isBlank()){
+    public UserDetailsResponseDTO findByEmail(String email) {
+        if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email can't be null or blank");
         }
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmail(email).map(userMapper::toUserDetailsResponseDTO)
                 .orElseThrow(() -> new IllegalArgumentException("User with email: " + email + " not found"));
     }
 

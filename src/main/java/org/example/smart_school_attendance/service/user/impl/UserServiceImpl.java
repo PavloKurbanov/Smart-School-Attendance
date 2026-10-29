@@ -11,6 +11,7 @@ import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(PublicRegisterRequestDTO request) {
+    public UserDetailsResponseDTO create(PublicRegisterRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
@@ -60,12 +61,12 @@ public class UserServiceImpl implements UserService {
         ));
         log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
                 , request.email(), request.phoneNumber(), user.getRole(), user.getId());
-        return user;
+        return userMapper.toUserDetailsResponseDTO(user);
     }
 
     @Override
     @Transactional
-    public User createUserByAdmin(AdminCreateUserRequestDTO request) {
+    public UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
         ));
         log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
                 , request.email(), request.phoneNumber(), user.getRole(), user.getId());
-        return user;
+        return userMapper.toUserDetailsResponseDTO(user);
     }
 
     @Override
@@ -160,5 +161,27 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Phone number can't be null or empty");
         }
         return userRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    private UserDetailsResponseDTO createUserInternal(
+            String firstName, String lastName, int age,
+            String email, String phoneNumber, String rawPassword, Role role
+    ) {
+        log.debug("Attempting to create new user with email: {}, phone number: {}, role: {}", email, phoneNumber, role);
+
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+
+        User user = new User(firstName, lastName, age, email, phoneNumber, encodedPassword, role);
+
+        try {
+            user = userRepository.save(user);
+            // Тут треба добре подумати, так як, в мене не налаштовані unique в entity
+        } catch (DataIntegrityViolationException ex) {
+            log.warn("Failed to create user due to duplicate email or phone: {}", email);
+            throw new IllegalArgumentException("User with such email or phone number already exists.");
+        }
+        log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
+                , user.getEmail(), user.getPhoneNumber(), user.getRole(), user.getId());
+        return userMapper.toUserDetailsResponseDTO(user);
     }
 }

@@ -31,10 +31,7 @@ public class UserController {
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public UserDetailsResponseDTO create(
             @Valid @RequestBody PublicRegisterRequestDTO publicRegisterRequestDTO) {
-        // Змінити так само як в методі FindById
-
-//        User user = userService.create(publicRegisterRequestDTO);
-        return userMapper.toUserDetailsResponseDTO(user);
+        return userService.create(publicRegisterRequestDTO);
     }
 
     @GetMapping("/{id}")

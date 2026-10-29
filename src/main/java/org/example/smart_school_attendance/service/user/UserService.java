@@ -9,9 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
-    User create(PublicRegisterRequestDTO request);
+    UserDetailsResponseDTO create(PublicRegisterRequestDTO request);
 
-    User createUserByAdmin(AdminCreateUserRequestDTO request);
+    UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request);
 
     void update(User user);
 

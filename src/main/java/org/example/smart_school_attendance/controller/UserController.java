@@ -1,11 +1,9 @@
 package org.example.smart_school_attendance.controller;
 
 import jakarta.validation.Valid;
-import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
-import org.example.smart_school_attendance.entity.user.User;
-import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +26,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public UserDetailsResponseDTO create(
-            @Valid @RequestBody PublicRegisterRequestDTO publicRegisterRequestDTO) {
-        return userService.create(publicRegisterRequestDTO);
+            @Valid @RequestBody AdminCreateUserRequestDTO adminCreateUserRequestDTO) {
+        return userService.createUserByAdmin(adminCreateUserRequestDTO);
     }
 
     @GetMapping("/{id}")

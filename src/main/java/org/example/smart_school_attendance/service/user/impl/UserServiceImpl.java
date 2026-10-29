@@ -140,6 +140,11 @@ public class UserServiceImpl implements UserService {
         if (userDTO == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
+
+        if(role == null) {
+            throw new IllegalArgumentException("Create user role can't be null");
+        }
+
         log.debug("Attempting to create new user with email: {}, phone number: {}, role: {}", userDTO.email(), userDTO.phoneNumber(), role);
 
         if (userRepository.existsByEmail(userDTO.email())) {

@@ -19,13 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
     @Autowired
-    public AuthServiceImpl(JwtService jwtService, PasswordEncoder passwordEncoder, UserService userService) {
+    public AuthServiceImpl(JwtService jwtService, UserService userService) {
         this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
@@ -59,24 +57,6 @@ public class AuthServiceImpl implements AuthService {
                 , publicRegisterRequestDTO.phoneNumber());
 
         UserDetailsResponseDTO user = userService.create(publicRegisterRequestDTO);
-
-        UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role());
-
-        log.info("User with email: {}, ID: {}, Role: {} successfully registered"
-                , user.email(), user.id(), user.role().name().toUpperCase());
-        return jwtService.generateTokenUser(userAuthDto);
-    }
-
-    @Override
-    @Transactional
-    public String registrationByAdmin(AdminCreateUserRequestDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new IllegalArgumentException("Create user request can't be null");
-        }
-        log.debug("Attempting to register Role: {} with email: {}, phone number: {}", requestDTO.role().name().toUpperCase(), requestDTO.email()
-                , requestDTO.phoneNumber());
-
-        UserDetailsResponseDTO user = userService.createUserByAdmin(requestDTO);
 
         UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role());
 

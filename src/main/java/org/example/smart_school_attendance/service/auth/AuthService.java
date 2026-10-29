@@ -8,6 +8,4 @@ public interface AuthService {
     String login(LoginRequestDTO request);
 
     String registration(PublicRegisterRequestDTO request);
-
-    String registrationByAdmin(AdminCreateUserRequestDTO requestDTO);
 }

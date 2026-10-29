@@ -1,5 +1,6 @@
 package org.example.smart_school_attendance.service.user;
 
+import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
@@ -13,9 +14,11 @@ public interface UserService {
 
     UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request);
 
-    void update(User user);
+    //void update(UserUpdateDTO user);
 
     UserDetailsResponseDTO findById(Long id);
+
+    UserAuthDto authenticate(String email, String password);
 
     UserDetailsResponseDTO findByEmail(String email);
 

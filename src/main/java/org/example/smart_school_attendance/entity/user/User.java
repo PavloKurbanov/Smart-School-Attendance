@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequest;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -34,11 +36,11 @@ public class User {
 
     @Email
     @NotBlank
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotBlank
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     @NotBlank
@@ -73,7 +75,17 @@ public class User {
         this.role = role;
     }
 
-    public User() {}
+    public User() {
+    }
+
+    public User(UserRegistrationRequest request, Role role) {
+        this.firstName = request.firstName();
+        this.lastName = request.lastName();
+        this.age = request.age();
+        this.email = request.email();
+        this.phoneNumber = request.phoneNumber();
+        this.role = role;
+    }
 
     @PrePersist
     private void prePersist() {

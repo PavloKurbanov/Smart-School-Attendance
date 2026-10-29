@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
@@ -31,13 +31,13 @@ public class JwtService {
         return claims.get(claimName).toString();
     }
 
-    public String generateTokenUser(User user) {
+    public String generateTokenUser(UserAuthDto user) {
         return Jwts.builder()
-                .setSubject(user.getEmail())
+                .setSubject(user.email())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .addClaims(Map.of("userId", user.getId(), "email", user.getEmail()))
+                .addClaims(Map.of("userId", user.id(), "email", user.email(), "role", user.role().name().toUpperCase()))
                 .compact();
     }
 

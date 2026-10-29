@@ -1,8 +1,10 @@
 package org.example.smart_school_attendance.service.user.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequest;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.Role;
@@ -35,65 +37,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDetailsResponseDTO create(PublicRegisterRequestDTO request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Create user request can't be null");
-        }
-        log.debug("Attempting to create new user with email: {}, phone number: {}", request.email(), request.phoneNumber());
-
-        if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email " + request.email() + " already exists");
-        }
-
-        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
-            throw new IllegalArgumentException("Phone number " + request.phoneNumber() + " already exists");
-        }
-
-        String encode = passwordEncoder.encode(request.password());
-
-        User user = userRepository.save(new User(
-                request.firstName(),
-                request.lastName(),
-                request.age(),
-                request.email(),
-                request.phoneNumber(),
-                encode,
-                Role.PARENT
-        ));
-        log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
-                , request.email(), request.phoneNumber(), user.getRole(), user.getId());
-        return userMapper.toUserDetailsResponseDTO(user);
+        User userInternal = createUserInternal(request, Role.PARENT);
+        return userMapper.toUserDetailsResponseDTO(userInternal);
     }
 
     @Override
     @Transactional
     public UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Create user request can't be null");
-        }
-        log.debug("Attempting to create new user with email: {}, phone number: {}", request.email(), request.phoneNumber());
-
-        if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email " + request.email() + " already exists");
-        }
-
-        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
-            throw new IllegalArgumentException("Phone number " + request.phoneNumber() + " already exists");
-        }
-
-        String encode = passwordEncoder.encode(request.password());
-
-        User user = userRepository.save(new User(
-                request.firstName(),
-                request.lastName(),
-                request.age(),
-                request.email(),
-                request.phoneNumber(),
-                encode,
-                request.role()
-        ));
-        log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
-                , request.email(), request.phoneNumber(), user.getRole(), user.getId());
-        return userMapper.toUserDetailsResponseDTO(user);
+        User userInternal = createUserInternal(request, request.role());
+        return userMapper.toUserDetailsResponseDTO(userInternal);
     }
 
     @Override
@@ -104,6 +56,25 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.findById(id).map(userMapper::toUserDetailsResponseDTO)
                 .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+    }
+
+    @Override
+    public UserAuthDto authenticate(String email, String password) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email can't be null or blank");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password can't be null or blank");
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with email: " + email + " not found"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+
+        return new UserAuthDto(user.getId(), user.getEmail(), user.getRole());
     }
 
     @Override
@@ -126,7 +97,7 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toUserListResponseDTO);
     }
 
-    @Override
+    //@Override
     @Transactional
     public void update(User user) {
         if (user == null) {
@@ -163,25 +134,30 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByPhoneNumber(phoneNumber);
     }
 
-    private UserDetailsResponseDTO createUserInternal(
-            String firstName, String lastName, int age,
-            String email, String phoneNumber, String rawPassword, Role role
+    private User createUserInternal(
+            UserRegistrationRequest userDTO, Role role
     ) {
-        log.debug("Attempting to create new user with email: {}, phone number: {}, role: {}", email, phoneNumber, role);
-
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-
-        User user = new User(firstName, lastName, age, email, phoneNumber, encodedPassword, role);
-
-        try {
-            user = userRepository.save(user);
-            // Тут треба добре подумати, так як, в мене не налаштовані unique в entity
-        } catch (DataIntegrityViolationException ex) {
-            log.warn("Failed to create user due to duplicate email or phone: {}", email);
-            throw new IllegalArgumentException("User with such email or phone number already exists.");
+        if (userDTO == null) {
+            throw new IllegalArgumentException("Create user request can't be null");
         }
+        log.debug("Attempting to create new user with email: {}, phone number: {}, role: {}", userDTO.email(), userDTO.phoneNumber(), role);
+
+        if (userRepository.existsByEmail(userDTO.email())) {
+            throw new IllegalArgumentException("Email " + userDTO.email() + " already exists");
+        }
+
+        if (userRepository.existsByPhoneNumber(userDTO.phoneNumber())) {
+            throw new IllegalArgumentException("Phone number " + userDTO.phoneNumber() + " already exists");
+        }
+
+        String encodedPassword = passwordEncoder.encode(userDTO.password());
+        User user = new User(userDTO, role);
+        user.setPassword(encodedPassword);
+
+        user = userRepository.save(user);
+
         log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
                 , user.getEmail(), user.getPhoneNumber(), user.getRole(), user.getId());
-        return userMapper.toUserDetailsResponseDTO(user);
+        return user;
     }
 }

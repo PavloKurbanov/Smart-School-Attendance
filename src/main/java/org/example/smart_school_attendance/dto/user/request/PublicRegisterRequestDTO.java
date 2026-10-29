@@ -13,5 +13,5 @@ public record PublicRegisterRequestDTO(
         @NotBlank @Email String email,
         @NotBlank String phoneNumber,
         @NotBlank String password
-) {
+) implements UserRegistrationRequest {
 }

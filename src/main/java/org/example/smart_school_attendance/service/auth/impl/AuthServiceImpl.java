@@ -2,8 +2,10 @@ package org.example.smart_school_attendance.service.auth.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.login.LoginRequestDTO;
+import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
+import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.security.jwt.JwtService;
 import org.example.smart_school_attendance.service.auth.AuthService;
@@ -38,14 +40,14 @@ public class AuthServiceImpl implements AuthService {
         }
 
         log.debug("Attempting to login with email: {}", request.email());
-        User user = userService.findByEmail(request.email());
 
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-        log.info("User with email: {}, ID: {}, Role: {} successfully logged in", request.email(), user.getId(), user.getRole().name().toUpperCase());
+        UserAuthDto user = userService.authenticate(request.email(), request.password());
+
+        log.info("User with email: {}, ID: {}, Role: {} successfully logged in"
+                , request.email(), user.id(), user.role().name().toUpperCase());
         return jwtService.generateTokenUser(user);
     }
+
 
     @Override
     @Transactional
@@ -56,9 +58,13 @@ public class AuthServiceImpl implements AuthService {
         log.debug("Attempting to register with email: {}, phone number: {}", publicRegisterRequestDTO.email()
                 , publicRegisterRequestDTO.phoneNumber());
 
-        User user = userService.create(publicRegisterRequestDTO);
-        log.info("User with email: {}, ID: {}, Role: {} successfully registered", user.getEmail(), user.getId(), user.getRole().name().toUpperCase());
-        return jwtService.generateTokenUser(user);
+        UserDetailsResponseDTO user = userService.create(publicRegisterRequestDTO);
+
+        UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role());
+
+        log.info("User with email: {}, ID: {}, Role: {} successfully registered"
+                , user.email(), user.id(), user.role().name().toUpperCase());
+        return jwtService.generateTokenUser(userAuthDto);
     }
 
     @Override
@@ -70,8 +76,12 @@ public class AuthServiceImpl implements AuthService {
         log.debug("Attempting to register Role: {} with email: {}, phone number: {}", requestDTO.role().name().toUpperCase(), requestDTO.email()
                 , requestDTO.phoneNumber());
 
-        User user = userService.createUserByAdmin(requestDTO);
-        log.info("User with email: {}, ID: {}, Role: {} successfully registered", user.getEmail(), user.getId(), user.getRole().name().toUpperCase());
-        return jwtService.generateTokenUser(user);
+        UserDetailsResponseDTO user = userService.createUserByAdmin(requestDTO);
+
+        UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role());
+
+        log.info("User with email: {}, ID: {}, Role: {} successfully registered"
+                , user.email(), user.id(), user.role().name().toUpperCase());
+        return jwtService.generateTokenUser(userAuthDto);
     }
 }

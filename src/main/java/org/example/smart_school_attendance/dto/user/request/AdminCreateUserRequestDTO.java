@@ -13,5 +13,5 @@ public record AdminCreateUserRequestDTO(
         @NotBlank String phoneNumber,
         @NotBlank String password,
         @NotBlank Role role
-) {
+) implements UserRegistrationRequest {
 }

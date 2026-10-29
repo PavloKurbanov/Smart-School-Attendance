@@ -3,15 +3,12 @@ package org.example.smart_school_attendance.service.auth.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.login.LoginRequestDTO;
 import org.example.smart_school_attendance.dto.security.UserAuthDto;
-import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
-import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.security.jwt.JwtService;
 import org.example.smart_school_attendance.service.auth.AuthService;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

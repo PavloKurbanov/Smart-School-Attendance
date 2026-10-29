@@ -1,7 +1,6 @@
 package org.example.smart_school_attendance.repository;
 
 import org.example.smart_school_attendance.entity.school.School;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

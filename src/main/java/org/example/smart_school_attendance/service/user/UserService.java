@@ -5,7 +5,6 @@ import org.example.smart_school_attendance.dto.user.request.AdminCreateUserReque
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
-import org.example.smart_school_attendance.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

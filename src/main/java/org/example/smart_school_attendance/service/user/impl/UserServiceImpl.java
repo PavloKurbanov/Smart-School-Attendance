@@ -13,7 +13,6 @@ import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;

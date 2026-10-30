@@ -1,4 +1,4 @@
-﻿package org.example.smart_school_attendance.service.childDetails.impl;
+package org.example.smart_school_attendance.service.childDetails.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.childDetails.CreateChildDetailsDTO;
@@ -31,6 +31,6 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
             throw new IllegalArgumentException("Child details with id: " + request.child().getId() + " already exists");
         }
 
-
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-﻿package org.example.smart_school_attendance.dto.childDetails;
+package org.example.smart_school_attendance.dto.childDetails;
 
 import jakarta.validation.constraints.NotBlank;
 import org.example.smart_school_attendance.entity.school.School;

@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.controller;
+package org.example.smart_school_attendance.controller.user;
 
 import jakarta.validation.Valid;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;

@@ -5,6 +5,7 @@ import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequest;
+import org.example.smart_school_attendance.dto.user.request.UserUpdateDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.Role;
@@ -78,6 +79,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public User entityById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("User ID can't be null or less than 0");
+        }
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public UserDetailsResponseDTO findByEmail(String email) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email can't be null or blank");
@@ -96,23 +107,37 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toUserListResponseDTO);
     }
 
-    //@Override
+    @Override
     @Transactional
-    public void update(User user) {
-        if (user == null) {
+    public void update(UserUpdateDTO request) {
+        if (request == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        if (user.getId() == null || user.getId() <= 0) {
-            throw new IllegalArgumentException("User ID can't be null");
+        log.debug("Attempting to update user with ID: {}", request.id());
+
+        User user = userRepository.findById(request.id())
+                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + request.id() + " not found"));
+
+        if (request.email() != null && !request.email().isBlank()) {
+            if (userRepository.existsByEmailAndIdNot(request.email(), user.getId())) {
+                throw new IllegalArgumentException("User with email: " + request.email() + " already exists");
+            }
+            user.setEmail(request.email());
         }
 
-        log.debug("Attempting to update user with ID: {}", user.getId());
-        if (!userRepository.existsById(user.getId())) {
-            throw new IllegalArgumentException("User with ID: " + user.getId() + " not found");
+        if (request.phoneNumber() != null && !request.phoneNumber().isBlank()) {
+            if (userRepository.existsByPhoneNumberAndIdNot(request.phoneNumber(), user.getId())) {
+                throw new IllegalArgumentException("User with phone number: " + request.phoneNumber() + " already exists");
+            }
+            user.setPhoneNumber(request.phoneNumber());
         }
+
+        if (request.password() != null && !request.password().isBlank()) {
+            user.setPassword(request.password());
+        }
+        log.info("User with ID: {} successfully updated in database", request.id());
         userRepository.save(user);
-        log.info("User with ID: {} successfully updated", user.getId());
     }
 
     @Override
@@ -133,14 +158,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByPhoneNumber(phoneNumber);
     }
 
-    private User createUserInternal(
-            UserRegistrationRequest userDTO, Role role
-    ) {
+    private User createUserInternal(UserRegistrationRequest userDTO, Role role) {
         if (userDTO == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
 
-        if(role == null) {
+        if (role == null) {
             throw new IllegalArgumentException("Create user role can't be null");
         }
 

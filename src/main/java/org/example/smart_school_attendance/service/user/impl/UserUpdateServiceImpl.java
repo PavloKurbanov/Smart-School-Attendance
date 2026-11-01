@@ -30,8 +30,8 @@ public class UserUpdateServiceImpl implements UserUpdateService {
             throw new IllegalArgumentException("User ID can't be null or less than 0");
         }
 
-        if (newPhoneNumber == null || newPhoneNumber.length() != 11) {
-            throw new IllegalArgumentException("New Phone Number must have 11 characters");
+        if (newPhoneNumber == null || newPhoneNumber.length() != 13) {
+            throw new IllegalArgumentException("New Phone Number must have 13 characters");
         }
         log.info("Attempting to change phone number for user with id: {} to new phone number: {}", userId, newPhoneNumber);
         userService.update(UserUpdateDTO.builder().id(userId).phoneNumber(newPhoneNumber).build());

@@ -23,29 +23,26 @@ public class UserUpdateController {
 
     @PutMapping("/phone")
     @ResponseStatus(HttpStatus.OK)
-    public String updatePhone(
+    public void updatePhone(
             @AuthenticationPrincipal SecurityUser user,
             @RequestBody @Valid ChangePhoneNumberDTO changePhoneNumberDTO) {
         userUpdateService.changePhoneNumber(user.getId(), changePhoneNumberDTO.phoneNumber());
-        return "Phone number updated successfully";
     }
 
     @PutMapping("/email")
     @ResponseStatus(HttpStatus.OK)
-    public String updateEmail(
+    public void updateEmail(
             @AuthenticationPrincipal SecurityUser user,
             @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
         userUpdateService.changeEmail(user.getId(), changeEmailDTO.email(), changeEmailDTO.password());
-        return "Email updated successfully";
     }
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
-    public String updatePassword(
+    public void updatePassword(
             @AuthenticationPrincipal SecurityUser user,
             @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
         userUpdateService.changePassword(user.getId(), changePasswordDTO.currentPassword()
                 , changePasswordDTO.newPassword(), changePasswordDTO.confirmNewPassword());
-        return "Password updated successfully";
     }
 }

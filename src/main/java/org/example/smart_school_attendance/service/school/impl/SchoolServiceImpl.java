@@ -1,13 +1,16 @@
-package org.example.smart_school_attendance.service.school;
+package org.example.smart_school_attendance.service.school.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.smart_school_attendance.dto.school.request.SchoolCreateDetailsDTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolUpdateDTO;
 import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResponseDTO;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.mapper.SchoolMapper;
 import org.example.smart_school_attendance.repository.SchoolRepository;
+import org.example.smart_school_attendance.service.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,7 +25,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public School create(SchoolCreateDetailsDTO responseDTO) {
+    public SchoolDetailsResponseDTO create(SchoolCreateDetailsDTO responseDTO) {
         if (responseDTO == null) {
             throw new IllegalArgumentException("Create school request can't be null");
         }
@@ -52,28 +55,42 @@ public class SchoolServiceImpl implements SchoolService {
         ));
         log.info("School with name: {}, email: {}, phone number: {}, address: {} successfully created with ID: {}"
                 , responseDTO.name(), responseDTO.email(), responseDTO.phoneNumber(), responseDTO.address(), school.getId());
-        return school;
+        return schoolMapper.toSchoolDetailsResponseDTO(school);
     }
 
     @Override
-    public void update(School school) {
-        if (school == null) {
+    @Transactional
+    public void update(SchoolUpdateDTO schoolUpdateDTO) {
+        if (schoolUpdateDTO == null) {
             throw new IllegalArgumentException("Update school request can't be null");
         }
 
-        if (school.getId() == null || school.getId() <= 0) {
-            throw new IllegalArgumentException("Update school request can't be empty");
+        log.debug("Attempting to update school with ID: {}", schoolUpdateDTO.id());
+
+        School school = schoolRepository.findById(schoolUpdateDTO.id())
+                .orElseThrow(() -> new IllegalArgumentException("School ID: " + schoolUpdateDTO.id() + " not found"));
+
+        if (schoolUpdateDTO.email() != null && !schoolUpdateDTO.email().isBlank()) {
+            if (schoolRepository.existsByEmailAndIdNot(schoolUpdateDTO.email(), school.getId())) {
+                throw new IllegalArgumentException("School with email: " + schoolUpdateDTO.email() + " already exists");
+            }
+            school.setEmail(schoolUpdateDTO.email());
+            log.info("School with ID: {} successfully updated email address to: {}", schoolUpdateDTO.id(), schoolUpdateDTO.email());
         }
 
-        log.debug("Attempting to update school with ID: {}", school.getId());
-        if (schoolRepository.existsById(school.getId())) {
-            throw new IllegalArgumentException("School with ID: " + school.getId() + " already exists");
+        if (schoolUpdateDTO.phoneNumber() != null && !schoolUpdateDTO.phoneNumber().isBlank()) {
+            if (schoolRepository.existsByPhoneNumberAndIdNot(schoolUpdateDTO.phoneNumber(), school.getId())) {
+                throw new IllegalArgumentException("School with phone number: " + schoolUpdateDTO.phoneNumber() + " already exists");
+            }
+            school.setPhoneNumber(schoolUpdateDTO.phoneNumber());
+            log.info("School with ID: {} successfully updated phone number to: {}", schoolUpdateDTO.id(), schoolUpdateDTO.phoneNumber());
         }
         schoolRepository.save(school);
-        log.info("School with ID: {} successfully updated", school.getId());
+        log.info("School with ID: {} successfully updated", schoolUpdateDTO.id());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SchoolDetailsResponseDTO findById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("School ID can't be null or empty");
@@ -84,6 +101,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SchoolDetailsResponseDTO findByName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("School name can't be null or empty");
@@ -94,6 +112,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SchoolDetailsResponseDTO findByEmail(String email) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("School email can't be null or empty");
@@ -103,7 +122,12 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SchoolDetailsResponseDTO findByPhoneNumber(String phoneNumber) {
-        return null;
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            throw new IllegalArgumentException("Phone number can't be null or empty");
+        }
+        return schoolRepository.findByPhoneNumber(phoneNumber).map(schoolMapper::toSchoolDetailsResponseDTO).
+                orElseThrow(() -> new IllegalArgumentException("School with phone number: " + phoneNumber + " not found"));
     }
 }

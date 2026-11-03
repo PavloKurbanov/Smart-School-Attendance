@@ -21,4 +21,8 @@ public interface SchoolRepository extends JpaRepository<School, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
+
+    boolean existsByPhoneNumberAndIdNot(String email, Long id);
 }

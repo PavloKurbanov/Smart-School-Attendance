@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequest;
+import org.example.smart_school_attendance.entity.school.School;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -55,6 +56,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
+    private School school;
 
     @NotNull
     @Column(name = "create_date", nullable = false)

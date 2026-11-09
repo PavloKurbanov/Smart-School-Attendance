@@ -9,6 +9,8 @@ import org.example.smart_school_attendance.mapper.SchoolMapper;
 import org.example.smart_school_attendance.repository.SchoolRepository;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    @Transactional
     public SchoolDetailsResponseDTO create(SchoolCreateDetailsDTO responseDTO) {
         if (responseDTO == null) {
             throw new IllegalArgumentException("Create school request can't be null");
@@ -129,5 +132,15 @@ public class SchoolServiceImpl implements SchoolService {
         }
         return schoolRepository.findByPhoneNumber(phoneNumber).map(schoolMapper::toSchoolDetailsResponseDTO).
                 orElseThrow(() -> new IllegalArgumentException("School with phone number: " + phoneNumber + " not found"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<SchoolDetailsResponseDTO> findAll(Pageable pageable) {
+        if(pageable == null){
+            throw new IllegalArgumentException("Pageable can't be null");
+        }
+        return schoolRepository.findAll(pageable)
+                .map(schoolMapper::toSchoolDetailsResponseDTO);
     }
 }

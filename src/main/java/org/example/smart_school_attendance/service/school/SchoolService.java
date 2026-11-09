@@ -4,6 +4,8 @@ import org.example.smart_school_attendance.dto.school.request.SchoolCreateDetail
 import org.example.smart_school_attendance.dto.school.request.SchoolUpdateDTO;
 import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResponseDTO;
 import org.example.smart_school_attendance.entity.school.School;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SchoolService {
     SchoolDetailsResponseDTO create(SchoolCreateDetailsDTO responseDTO);
@@ -17,4 +19,6 @@ public interface SchoolService {
     SchoolDetailsResponseDTO findByEmail(String email);
 
     SchoolDetailsResponseDTO findByPhoneNumber(String phoneNumber);
+
+    Page<SchoolDetailsResponseDTO> findAll(Pageable pageable);
 }

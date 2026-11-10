@@ -2,8 +2,10 @@ package org.example.smart_school_attendance.entity.school;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.smart_school_attendance.entity.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +23,8 @@ public class School {
     private Integer radius;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+    @OneToMany(mappedBy = "school")
+    private List<User> admins;
 
     public School(String name, String address, String phoneNumber, String email, Double latitude, Double longitude, Integer radius) {
         this.name = name;

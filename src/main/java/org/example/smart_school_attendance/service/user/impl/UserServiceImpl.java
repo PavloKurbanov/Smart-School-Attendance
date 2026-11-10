@@ -8,7 +8,6 @@ import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequ
 import org.example.smart_school_attendance.dto.user.request.UserUpdateDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
-import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.UserMapper;
@@ -27,15 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SchoolService schoolService;
     private final UserMapper userMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, SchoolService schoolService, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.schoolService = schoolService;
     }
 
     @Override
@@ -49,6 +46,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request) {
         User userInternal = createUserInternal(request, request.role());
+        userInternal.setSchool(request.school());
         return userMapper.toUserDetailsResponseDTO(userInternal);
     }
 

@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/school/update")
+@RequestMapping("/api/v1/schools")
 public class SchoolUpdateController {
 
     private final SchoolUpdateService schoolUpdateService;
@@ -20,19 +20,19 @@ public class SchoolUpdateController {
         this.schoolUpdateService = schoolUpdateService;
     }
 
-    @PutMapping("/phone")
+    @PutMapping("/{id}/phone")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
     public void updatePhone(
-            @RequestBody @Valid Long id, ChangePhoneDTO changePhoneDTO) {
+            @PathVariable Long id, @RequestBody @Valid ChangePhoneDTO changePhoneDTO) {
         schoolUpdateService.changeSchoolPhoneNumber(id, changePhoneDTO);
     }
 
-    @PutMapping("/email")
+    @PutMapping("/{id}/email")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
     public void updateEmail(
-            @RequestBody @Valid Long id, ChangeEmailDTO changeEmailDTO) {
+            @PathVariable Long id, @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
         schoolUpdateService.changeSchoolEmail(id, changeEmailDTO);
     }
 }

@@ -63,22 +63,22 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional
-    public void update(SchoolUpdateDTO schoolUpdateDTO) {
+    public void update(Long id, SchoolUpdateDTO schoolUpdateDTO) {
         if (schoolUpdateDTO == null) {
             throw new IllegalArgumentException("Update school request can't be null");
         }
 
-        log.debug("Attempting to update school with ID: {}", schoolUpdateDTO.id());
+        log.debug("Attempting to update school with ID: {}", id);
 
-        School school = schoolRepository.findById(schoolUpdateDTO.id())
-                .orElseThrow(() -> new IllegalArgumentException("School ID: " + schoolUpdateDTO.id() + " not found"));
+        School school = schoolRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("School ID: " + id + " not found"));
 
         if (schoolUpdateDTO.email() != null && !schoolUpdateDTO.email().isBlank()) {
             if (schoolRepository.existsByEmailAndIdNot(schoolUpdateDTO.email(), school.getId())) {
                 throw new IllegalArgumentException("School with email: " + schoolUpdateDTO.email() + " already exists");
             }
             school.setEmail(schoolUpdateDTO.email());
-            log.info("School with ID: {} successfully updated email address to: {}", schoolUpdateDTO.id(), schoolUpdateDTO.email());
+            log.info("School with ID: {} successfully updated email address to: {}", id, schoolUpdateDTO.email());
         }
 
         if (schoolUpdateDTO.phoneNumber() != null && !schoolUpdateDTO.phoneNumber().isBlank()) {
@@ -86,10 +86,10 @@ public class SchoolServiceImpl implements SchoolService {
                 throw new IllegalArgumentException("School with phone number: " + schoolUpdateDTO.phoneNumber() + " already exists");
             }
             school.setPhoneNumber(schoolUpdateDTO.phoneNumber());
-            log.info("School with ID: {} successfully updated phone number to: {}", schoolUpdateDTO.id(), schoolUpdateDTO.phoneNumber());
+            log.info("School with ID: {} successfully updated phone number to: {}", id, schoolUpdateDTO.phoneNumber());
         }
         schoolRepository.save(school);
-        log.info("School with ID: {} successfully updated", schoolUpdateDTO.id());
+        log.info("School with ID: {} successfully updated", id);
     }
 
     @Override

@@ -14,11 +14,15 @@ import java.util.Objects;
 public class SecurityUser implements UserDetails {
     private final User user;
     private final Long userId;
+    private final Role role;
+    private final Long schoolId;
 
     public SecurityUser(User user) {
         Objects.requireNonNull(user, "User must not be null");
         this.user = user;
         this.userId = user.getId();
+        this.role = user.getRole();
+        this.schoolId = user.getSchool() != null ? user.getSchool().getId() : null;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class SecurityUser implements UserDetails {
         if (user.getRole() == null) {
             return List.of();
         }
-        String userRole ="ROLE_" + user.getRole().name().toUpperCase();
+        String userRole = "ROLE_" + user.getRole().name().toUpperCase();
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userRole);
         return List.of(simpleGrantedAuthority);
     }
@@ -66,5 +70,13 @@ public class SecurityUser implements UserDetails {
 
     public Long getId() {
         return userId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Long getSchoolId() {
+        return schoolId;
     }
 }

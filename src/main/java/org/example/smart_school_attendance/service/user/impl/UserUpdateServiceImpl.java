@@ -34,7 +34,7 @@ public class UserUpdateServiceImpl implements UserUpdateService {
             throw new IllegalArgumentException("New Phone Number must have 13 characters");
         }
         log.info("Attempting to change phone number for user with id: {} to new phone number: {}", userId, newPhoneNumber);
-        userService.update(UserUpdateDTO.builder().id(userId).phoneNumber(newPhoneNumber).build());
+        userService.update(userId, UserUpdateDTO.builder().phoneNumber(newPhoneNumber).build());
         log.info("Successfully changed phone number for user with id: {} to new phone number: {}", userId, newPhoneNumber);
     }
 
@@ -54,7 +54,7 @@ public class UserUpdateServiceImpl implements UserUpdateService {
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("Current passwords do not match");
         }
-        userService.update(UserUpdateDTO.builder().id(userId).email(newEmail).build());
+        userService.update(userId, UserUpdateDTO.builder().email(newEmail).build());
         log.info("Successfully changed email for user with id: {} to new email: {}", userId, newEmail);
     }
 
@@ -85,7 +85,7 @@ public class UserUpdateServiceImpl implements UserUpdateService {
         }
 
         String encodedPassword = passwordEncoder.encode(newPassword);
-        userService.update(UserUpdateDTO.builder().id(userId).password(encodedPassword).build());
+        userService.update(userId, UserUpdateDTO.builder().password(encodedPassword).build());
 
         log.info("Successfully changed password for user with id: {}", userId);
     }

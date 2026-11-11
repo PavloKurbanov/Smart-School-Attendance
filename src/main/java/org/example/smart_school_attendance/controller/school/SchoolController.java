@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/school")
+@RequestMapping("/api/v1/schools")
 public class SchoolController {
 
     private final SchoolService schoolService;

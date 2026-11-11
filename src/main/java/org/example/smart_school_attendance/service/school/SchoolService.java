@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 public interface SchoolService {
     SchoolDetailsResponseDTO create(SchoolCreateDetailsDTO responseDTO);
 
-    void update(SchoolUpdateDTO school);
+    void update(Long id, SchoolUpdateDTO schoolUpdateDTO);
 
     SchoolDetailsResponseDTO findById(Long id);
 

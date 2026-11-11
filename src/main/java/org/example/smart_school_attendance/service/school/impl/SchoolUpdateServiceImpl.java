@@ -31,7 +31,7 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
             throw new IllegalArgumentException("New Email must be valid and not blank");
         }
         log.debug("Attempting to change email for school with id: {} to new email: {}", id, changeEmailDTO.newEmail());
-        schoolService.update(SchoolUpdateDTO.builder().id(id).email(changeEmailDTO.newEmail()).build());
+        schoolService.update(id, SchoolUpdateDTO.builder().email(changeEmailDTO.newEmail()).build());
         log.info("Successfully changed email for school with id: {} to new email: {}", id, changeEmailDTO.newEmail());
     }
 
@@ -45,7 +45,7 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
             throw new IllegalArgumentException("New Phone Number must not be blank");
         }
         log.debug("Attempting to change phone number for school with id: {} to new phone number: {}", id, changePhoneDTO.newPhoneNumber());
-        schoolService.update(SchoolUpdateDTO.builder().id(id).phoneNumber(changePhoneDTO.newPhoneNumber()).build());
+        schoolService.update(id, SchoolUpdateDTO.builder().phoneNumber(changePhoneDTO.newPhoneNumber()).build());
         log.info("Successfully changed phone number for school with id: {} to new phone number: {}", id, changePhoneDTO.newPhoneNumber());
     }
 }

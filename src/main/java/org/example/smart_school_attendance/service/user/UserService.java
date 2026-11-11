@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request);
 
-   void update(UserUpdateDTO user);
+   void update(Long id, UserUpdateDTO request);
 
     UserDetailsResponseDTO findById(Long id);
 

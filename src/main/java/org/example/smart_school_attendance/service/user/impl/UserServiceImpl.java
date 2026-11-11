@@ -12,6 +12,7 @@ import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
+import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,15 +112,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(UserUpdateDTO request) {
+    public void update(Long id, UserUpdateDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        log.debug("Attempting to update user with ID: {}", request.id());
+        log.debug("Attempting to update user with ID: {}", id);
 
-        User user = userRepository.findById(request.id())
-                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + request.id() + " not found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+
 
         if (request.email() != null && !request.email().isBlank()) {
             if (userRepository.existsByEmailAndIdNot(request.email(), user.getId())) {
@@ -138,7 +140,7 @@ public class UserServiceImpl implements UserService {
         if (request.password() != null && !request.password().isBlank()) {
             user.setPassword(request.password());
         }
-        log.info("User with ID: {} successfully updated in database", request.id());
+        log.info("User with ID: {} successfully updated in database", id);
         userRepository.save(user);
     }
 

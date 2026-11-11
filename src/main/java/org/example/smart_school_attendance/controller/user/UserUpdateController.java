@@ -12,7 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/users/update/me")
+@RequestMapping("/api/v1/users/me")
 public class UserUpdateController {
     private final UserUpdateService userUpdateService;
 

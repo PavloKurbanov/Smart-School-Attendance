@@ -31,11 +31,14 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
             throw new IllegalArgumentException("School ID can't be null or less than 0");
         }
 
-        if (schoolChangeEmailRequestDTO == null || schoolChangeEmailRequestDTO.newEmail() == null || !schoolChangeEmailRequestDTO.newEmail().contains("@") || !schoolChangeEmailRequestDTO.newEmail().contains(".") || schoolChangeEmailRequestDTO.newEmail().isBlank()) {
+        if (schoolChangeEmailRequestDTO == null || schoolChangeEmailRequestDTO.newEmail() == null ||
+                !schoolChangeEmailRequestDTO.newEmail().contains("@") ||
+                !schoolChangeEmailRequestDTO.newEmail().contains(".") ||
+                schoolChangeEmailRequestDTO.newEmail().isBlank()) {
             throw new IllegalArgumentException("New Email must be valid and not blank");
         }
 
-        if(accessUserToSchoolUpdate(id)) {
+        if (accessUserToSchoolUpdate(id)) {
             throw new IllegalArgumentException("User does not have permission to update school with ID: " + id);
         }
 
@@ -54,7 +57,7 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
             throw new IllegalArgumentException("New Phone Number must not be blank");
         }
 
-        if(accessUserToSchoolUpdate(id)) {
+        if (accessUserToSchoolUpdate(id)) {
             throw new IllegalArgumentException("User does not have permission to update school with ID: " + id);
         }
 

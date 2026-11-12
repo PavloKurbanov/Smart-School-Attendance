@@ -7,7 +7,6 @@ import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResp
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.mapper.SchoolMapper;
 import org.example.smart_school_attendance.repository.SchoolRepository;
-import org.example.smart_school_attendance.security.SecurityUser;
 import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
     private final SchoolMapper schoolMapper;
-    private final SecurityService securityService;
 
     @Autowired
     public SchoolServiceImpl(SchoolRepository schoolRepository, SchoolMapper schoolMapper, SecurityService securityService) {
         this.schoolRepository = schoolRepository;
         this.schoolMapper = schoolMapper;
-        this.securityService = securityService;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class UserUpdateController {
         this.userUpdateService = userUpdateService;
     }
 
-    @PutMapping("/phone")
+    @PutMapping("{id}/phone")
     @ResponseStatus(HttpStatus.OK)
     public void updatePhone(
             @PathVariable Long id,
@@ -37,7 +37,7 @@ public class UserUpdateController {
         userUpdateService.changeEmail(id, userChangeEmailRequestDTO);
     }
 
-    @PutMapping("/password")
+    @PutMapping("/{id}/password")
     @ResponseStatus(HttpStatus.OK)
     public void updatePassword(
             @PathVariable Long id,

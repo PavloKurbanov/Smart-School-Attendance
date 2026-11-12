@@ -7,7 +7,7 @@ import org.example.smart_school_attendance.entity.user.User;
 
 import java.util.List;
 
-public record CreateChildDetailsDTO(
+public record CreateChildDetailsRequestDTO(
         @NotBlank User child,
         @NotBlank School school,
         @NotBlank ClassRoom classRoom,

@@ -1,8 +1,8 @@
-package org.example.smart_school_attendance.dto.school.updatePhoneRequest;
+package org.example.smart_school_attendance.dto.school.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ChangePhoneDTO(
+public record SchoolChangePhoneRequestDTO(
         @NotBlank(message = "New phone number must not be blank")
         String newPhoneNumber
 ) {

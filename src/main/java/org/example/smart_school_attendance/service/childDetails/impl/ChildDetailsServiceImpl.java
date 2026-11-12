@@ -1,7 +1,7 @@
 package org.example.smart_school_attendance.service.childDetails.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.dto.childDetails.CreateChildDetailsDTO;
+import org.example.smart_school_attendance.dto.childDetails.CreateChildDetailsRequestDTO;
 import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.repository.ChildDetailsRepository;
 import org.example.smart_school_attendance.service.childDetails.ChildDetailsService;
@@ -20,7 +20,7 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
     }
 
     @Override
-    public ChildDetails createChildDetails(CreateChildDetailsDTO request) {
+    public ChildDetails createChildDetails(CreateChildDetailsRequestDTO request) {
         if(request == null){
             throw new IllegalArgumentException("Create Child details can't be null");
         }

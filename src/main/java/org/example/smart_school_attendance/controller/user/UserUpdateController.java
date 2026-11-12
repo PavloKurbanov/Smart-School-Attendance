@@ -1,9 +1,9 @@
 package org.example.smart_school_attendance.controller.user;
 
 import jakarta.validation.Valid;
-import org.example.smart_school_attendance.dto.user.updateEmailRequest.ChangeEmailDTO;
-import org.example.smart_school_attendance.dto.user.updatePasswordRequest.ChangePasswordDTO;
-import org.example.smart_school_attendance.dto.user.updatePhoneRequest.ChangePhoneNumberDTO;
+import org.example.smart_school_attendance.dto.user.request.UserChangeEmailRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.UserChangePasswordRequestDTO;
+import org.example.smart_school_attendance.dto.user.request.UserChangePhoneRequestDTO;
 import org.example.smart_school_attendance.security.SecurityUser;
 import org.example.smart_school_attendance.service.user.UserUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +25,23 @@ public class UserUpdateController {
     @ResponseStatus(HttpStatus.OK)
     public void updatePhone(
             @AuthenticationPrincipal SecurityUser user,
-            @RequestBody @Valid ChangePhoneNumberDTO changePhoneNumberDTO) {
-        userUpdateService.changePhoneNumber(user.getId(), changePhoneNumberDTO.phoneNumber());
+            @RequestBody @Valid UserChangePhoneRequestDTO userChangePhoneRequestDTO) {
+        userUpdateService.changePhoneNumber(user.getId(), userChangePhoneRequestDTO);
     }
 
-    @PutMapping("/email")
+    @PutMapping("/{id}/email")
     @ResponseStatus(HttpStatus.OK)
     public void updateEmail(
-            @AuthenticationPrincipal SecurityUser user,
-            @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
-        userUpdateService.changeEmail(user.getId(), changeEmailDTO.email(), changeEmailDTO.password());
+            @PathVariable Long id,
+            @RequestBody @Valid UserChangeEmailRequestDTO userChangeEmailRequestDTO) {
+        userUpdateService.changeEmail(id, userChangeEmailRequestDTO);
     }
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public void updatePassword(
             @AuthenticationPrincipal SecurityUser user,
-            @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
-        userUpdateService.changePassword(user.getId(), changePasswordDTO.currentPassword()
-                , changePasswordDTO.newPassword(), changePasswordDTO.confirmNewPassword());
+            @RequestBody @Valid UserChangePasswordRequestDTO userChangePasswordRequestDTO) {
+        userUpdateService.changePassword(user.getId(), userChangePasswordRequestDTO);
     }
 }

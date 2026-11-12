@@ -36,7 +36,7 @@ public class SecurityService {
         return getCurrentUser().getSchoolId();
     }
 
-    public boolean hasAccessToSchool(Long targetSchoolId) {
+    public boolean hasAccessToSchoolUpdate(Long targetSchoolId) {
         if (targetSchoolId == null) {
             return false;
         }
@@ -45,11 +45,11 @@ public class SecurityService {
             return true;
         }
         Long currentUserSchoolId = getCurrentUserSchoolId();
-        return currentUserSchoolId != null && currentUserSchoolId.equals(targetSchoolId);
+        return currentUserSchoolId != null && currentUserSchoolId.equals(targetSchoolId) && getCurrentUserRole() == Role.SCHOOL_ADMIN;
     }
 
     public void validateSchoolAccess(Long targetSchoolId) {
-        if (!hasAccessToSchool(targetSchoolId)) {
+        if (!hasAccessToSchoolUpdate(targetSchoolId)) {
             throw new AccessDeniedException("Access denied: You do not have permission to access school with ID: " + targetSchoolId);
         }
     }

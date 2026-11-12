@@ -58,7 +58,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "school_id", referencedColumnName = "id")
+    @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = true)
     private School school;
 
     @NotNull
@@ -82,13 +82,14 @@ public class User {
     public User() {
     }
 
-    public User(UserRegistrationRequest request, Role role) {
+    public User(UserRegistrationRequest request, Role role, School school) {
         this.firstName = request.firstName();
         this.lastName = request.lastName();
         this.age = request.age();
         this.email = request.email();
         this.phoneNumber = request.phoneNumber();
         this.role = role;
+        this.school = school;
     }
 
     @PrePersist

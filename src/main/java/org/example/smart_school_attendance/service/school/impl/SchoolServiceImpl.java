@@ -1,12 +1,14 @@
 package org.example.smart_school_attendance.service.school.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.dto.school.request.SchoolCreateDetailsDTO;
-import org.example.smart_school_attendance.dto.school.request.SchoolUpdateDTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolCreateRequestTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolUpdateRequestDTO;
 import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResponseDTO;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.mapper.SchoolMapper;
 import org.example.smart_school_attendance.repository.SchoolRepository;
+import org.example.smart_school_attendance.security.SecurityUser;
+import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,16 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
     private final SchoolMapper schoolMapper;
+    private final SecurityService securityService;
 
     @Autowired
-    public SchoolServiceImpl(SchoolRepository schoolRepository, SchoolMapper schoolMapper) {
+    public SchoolServiceImpl(SchoolRepository schoolRepository, SchoolMapper schoolMapper, SecurityService securityService) {
         this.schoolRepository = schoolRepository;
         this.schoolMapper = schoolMapper;
+        this.securityService = securityService;
     }
 
     @Override
     @Transactional
-    public SchoolDetailsResponseDTO create(SchoolCreateDetailsDTO responseDTO) {
+    public SchoolDetailsResponseDTO create(SchoolCreateRequestTO responseDTO) {
         if (responseDTO == null) {
             throw new IllegalArgumentException("Create school request can't be null");
         }
@@ -63,33 +67,37 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional
-    public void update(Long id, SchoolUpdateDTO schoolUpdateDTO) {
-        if (schoolUpdateDTO == null) {
+    public void update(Long schoolId, SchoolUpdateRequestDTO schoolUpdateRequestDTO) {
+        if(schoolId == null || schoolId <= 0) {
+            throw new IllegalArgumentException("School ID can't be null or less than 0");
+        }
+
+        if (schoolUpdateRequestDTO == null) {
             throw new IllegalArgumentException("Update school request can't be null");
         }
 
-        log.debug("Attempting to update school with ID: {}", id);
+        log.debug("Attempting to update school with ID: {}", schoolId);
 
-        School school = schoolRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("School ID: " + id + " not found"));
+        School school = schoolRepository.findById(schoolId)
+                .orElseThrow(() -> new IllegalArgumentException("School ID: " + schoolId + " not found"));
 
-        if (schoolUpdateDTO.email() != null && !schoolUpdateDTO.email().isBlank()) {
-            if (schoolRepository.existsByEmailAndIdNot(schoolUpdateDTO.email(), school.getId())) {
-                throw new IllegalArgumentException("School with email: " + schoolUpdateDTO.email() + " already exists");
+        if (schoolUpdateRequestDTO.email() != null && !schoolUpdateRequestDTO.email().isBlank()) {
+            if (schoolRepository.existsByEmailAndIdNot(schoolUpdateRequestDTO.email(), school.getId())) {
+                throw new IllegalArgumentException("School with email: " + schoolUpdateRequestDTO.email() + " already exists");
             }
-            school.setEmail(schoolUpdateDTO.email());
-            log.info("School with ID: {} successfully updated email address to: {}", id, schoolUpdateDTO.email());
+            school.setEmail(schoolUpdateRequestDTO.email());
+            log.info("School with ID: {} successfully updated email address to: {}", schoolId, schoolUpdateRequestDTO.email());
         }
 
-        if (schoolUpdateDTO.phoneNumber() != null && !schoolUpdateDTO.phoneNumber().isBlank()) {
-            if (schoolRepository.existsByPhoneNumberAndIdNot(schoolUpdateDTO.phoneNumber(), school.getId())) {
-                throw new IllegalArgumentException("School with phone number: " + schoolUpdateDTO.phoneNumber() + " already exists");
+        if (schoolUpdateRequestDTO.phoneNumber() != null && !schoolUpdateRequestDTO.phoneNumber().isBlank()) {
+            if (schoolRepository.existsByPhoneNumberAndIdNot(schoolUpdateRequestDTO.phoneNumber(), school.getId())) {
+                throw new IllegalArgumentException("School with phone number: " + schoolUpdateRequestDTO.phoneNumber() + " already exists");
             }
-            school.setPhoneNumber(schoolUpdateDTO.phoneNumber());
-            log.info("School with ID: {} successfully updated phone number to: {}", id, schoolUpdateDTO.phoneNumber());
+            school.setPhoneNumber(schoolUpdateRequestDTO.phoneNumber());
+            log.info("School with ID: {} successfully updated phone number to: {}", schoolId, schoolUpdateRequestDTO.phoneNumber());
         }
         schoolRepository.save(school);
-        log.info("School with ID: {} successfully updated", id);
+        log.info("School with ID: {} successfully updated", schoolId);
     }
 
     @Override
@@ -137,10 +145,16 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     @Transactional(readOnly = true)
     public Page<SchoolDetailsResponseDTO> findAll(Pageable pageable) {
-        if(pageable == null){
+        if (pageable == null) {
             throw new IllegalArgumentException("Pageable can't be null");
         }
         return schoolRepository.findAll(pageable)
                 .map(schoolMapper::toSchoolDetailsResponseDTO);
+    }
+
+    @Override
+    public School entityById(Long id) {
+        return schoolRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("School with ID: " + id + " not found"));
     }
 }

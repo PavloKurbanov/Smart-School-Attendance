@@ -2,7 +2,7 @@ package org.example.smart_school_attendance.controller.school;
 
 
 import jakarta.validation.Valid;
-import org.example.smart_school_attendance.dto.school.request.SchoolCreateDetailsDTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolCreateRequestTO;
 import org.example.smart_school_attendance.dto.school.response.SchoolDetailsResponseDTO;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class SchoolController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
     public SchoolDetailsResponseDTO create(
-            @RequestBody @Valid SchoolCreateDetailsDTO createDetailsDTO) {
+            @RequestBody @Valid SchoolCreateRequestTO createDetailsDTO) {
         return schoolService.create(createDetailsDTO);
     }
 

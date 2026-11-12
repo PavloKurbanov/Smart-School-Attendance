@@ -1,8 +1,8 @@
 package org.example.smart_school_attendance.controller.school;
 
 import jakarta.validation.Valid;
-import org.example.smart_school_attendance.dto.school.updateEmailRequest.ChangeEmailDTO;
-import org.example.smart_school_attendance.dto.school.updatePhoneRequest.ChangePhoneDTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolChangeEmailRequestDTO;
+import org.example.smart_school_attendance.dto.school.request.SchoolChangePhoneRequestDTO;
 import org.example.smart_school_attendance.service.school.SchoolUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,15 +24,15 @@ public class SchoolUpdateController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
     public void updatePhone(
-            @PathVariable Long id, @RequestBody @Valid ChangePhoneDTO changePhoneDTO) {
-        schoolUpdateService.changeSchoolPhoneNumber(id, changePhoneDTO);
+            @PathVariable Long id, @RequestBody @Valid SchoolChangePhoneRequestDTO schoolChangePhoneRequestDTO) {
+        schoolUpdateService.changeSchoolPhoneNumber(id, schoolChangePhoneRequestDTO);
     }
 
     @PutMapping("/{id}/email")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
     public void updateEmail(
-            @PathVariable Long id, @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
-        schoolUpdateService.changeSchoolEmail(id, changeEmailDTO);
+            @PathVariable Long id, @RequestBody @Valid SchoolChangeEmailRequestDTO schoolChangeEmailRequestDTO) {
+        schoolUpdateService.changeSchoolEmail(id, schoolChangeEmailRequestDTO);
     }
 }

@@ -15,6 +15,6 @@ public record AdminCreateUserRequestDTO(
         @NotBlank String phoneNumber,
         @NotBlank String password,
         @NotNull Role role,
-        School school
+        Long schoolId
         ) implements UserRegistrationRequest {
 }

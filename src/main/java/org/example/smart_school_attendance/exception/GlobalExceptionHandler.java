@@ -2,7 +2,7 @@ package org.example.smart_school_attendance.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.dto.error.ApiErrorResponse;
+import org.example.smart_school_attendance.dto.common.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

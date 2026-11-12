@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
-public record SchoolCreateDetailsDTO(
+public record SchoolCreateRequestTO(
 
         @NotBlank(message = "School name is required")
         String name,

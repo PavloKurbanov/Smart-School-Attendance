@@ -1,4 +1,4 @@
-package org.example.smart_school_attendance.dto.error;
+package org.example.smart_school_attendance.dto.common;
 
 import java.time.LocalDateTime;
 

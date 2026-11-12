@@ -8,11 +8,11 @@ import org.example.smart_school_attendance.dto.user.request.UserRegistrationRequ
 import org.example.smart_school_attendance.dto.user.request.UserUpdateDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
+import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
-import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +28,29 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final SchoolService schoolService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, SchoolService schoolService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.schoolService = schoolService;
     }
 
     @Override
     @Transactional
     public UserDetailsResponseDTO create(PublicRegisterRequestDTO request) {
-        User userInternal = createUserInternal(request, Role.PARENT);
+        School school = schoolService.entityById(request.schoolId());
+        User userInternal = createUserInternal(request, Role.PARENT, school);
         return userMapper.toUserDetailsResponseDTO(userInternal);
     }
 
     @Override
     @Transactional
     public UserDetailsResponseDTO createUserByAdmin(AdminCreateUserRequestDTO request) {
-        User userInternal = createUserInternal(request, request.role());
-        userInternal.setSchool(request.school());
+        School school = schoolService.entityById(request.schoolId());
+        User userInternal = createUserInternal(request, request.role(), school);
         return userMapper.toUserDetailsResponseDTO(userInternal);
     }
 
@@ -162,7 +165,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByPhoneNumber(phoneNumber);
     }
 
-    private User createUserInternal(UserRegistrationRequest userDTO, Role role) {
+    private User createUserInternal(UserRegistrationRequest userDTO, Role role, School school) {
         if (userDTO == null) {
             throw new IllegalArgumentException("Create user request can't be null");
         }
@@ -182,7 +185,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String encodedPassword = passwordEncoder.encode(userDTO.password());
-        User user = new User(userDTO, role);
+        User user = new User(userDTO, role, school);
         user.setPassword(encodedPassword);
 
         user = userRepository.save(user);

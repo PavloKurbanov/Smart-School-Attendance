@@ -1,8 +1,8 @@
-package org.example.smart_school_attendance.dto.user.updatePasswordRequest;
+package org.example.smart_school_attendance.dto.user.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ChangePasswordDTO(
+public record UserChangePasswordRequestDTO(
         @NotBlank(message = "Current password can't be blank")
         String currentPassword,
         @NotBlank(message = "New password can't be blank")

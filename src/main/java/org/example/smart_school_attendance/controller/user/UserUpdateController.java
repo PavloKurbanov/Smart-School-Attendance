@@ -24,9 +24,9 @@ public class UserUpdateController {
     @PutMapping("/phone")
     @ResponseStatus(HttpStatus.OK)
     public void updatePhone(
-            @AuthenticationPrincipal SecurityUser user,
+            @PathVariable Long id,
             @RequestBody @Valid UserChangePhoneRequestDTO userChangePhoneRequestDTO) {
-        userUpdateService.changePhoneNumber(user.getId(), userChangePhoneRequestDTO);
+        userUpdateService.changePhoneNumber(id, userChangePhoneRequestDTO);
     }
 
     @PutMapping("/{id}/email")
@@ -40,8 +40,8 @@ public class UserUpdateController {
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public void updatePassword(
-            @AuthenticationPrincipal SecurityUser user,
+            @PathVariable Long id,
             @RequestBody @Valid UserChangePasswordRequestDTO userChangePasswordRequestDTO) {
-        userUpdateService.changePassword(user.getId(), userChangePasswordRequestDTO);
+        userUpdateService.changePassword(id, userChangePasswordRequestDTO);
     }
 }

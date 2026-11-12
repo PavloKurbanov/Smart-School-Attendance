@@ -11,6 +11,7 @@ import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.service.school.SchoolService;
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        return new UserAuthDto(user.getId(), user.getEmail(), user.getRole());
+        return new UserAuthDto(user.getId(), user.getEmail(), user.getRole(), user.getUserStatus());
     }
 
     @Override
@@ -193,5 +194,21 @@ public class UserServiceImpl implements UserService {
         log.info("User with email: {}, phone number: {}, role: {} successfully created with ID: {}"
                 , user.getEmail(), user.getPhoneNumber(), user.getRole(), user.getId());
         return user;
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Long id, UserStatus status) {
+        if(id == null || id <= 0) {
+            throw new IllegalArgumentException("User ID can't be null or less than 0");
+        }
+        if(status == null) {
+            throw new IllegalArgumentException("User status can't be null");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
+        user.setUserStatus(status);
+        userRepository.save(user);
+        log.info("User with ID: {} successfully updated status to: {}", id, status);
     }
 }

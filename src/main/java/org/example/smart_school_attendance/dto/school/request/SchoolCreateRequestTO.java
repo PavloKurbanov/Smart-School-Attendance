@@ -41,8 +41,6 @@ public record SchoolCreateRequestTO(
 
         @NotNull(message = "Radius is required")
         @Min(value = 1, message = "Radius must be greater than 0 meters")
-        Integer radius,
-        LocalDateTime createDate,
-        LocalDateTime updateDate
+        Integer radius
 ) {
 }

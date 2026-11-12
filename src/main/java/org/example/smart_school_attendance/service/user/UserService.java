@@ -7,6 +7,7 @@ import org.example.smart_school_attendance.dto.user.request.UserUpdateDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
 import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +31,6 @@ public interface UserService {
     boolean existByPhone(String phoneNumber);
 
     User entityById(Long id);
+
+    void updateStatus(Long id, UserStatus status);
 }

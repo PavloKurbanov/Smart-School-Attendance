@@ -57,6 +57,7 @@ public class School {
     private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "school")
+    @Column(name = "admins")
     private List<User> admins = new ArrayList<>();
 
     public School(String name, String address, String phoneNumber, String email, Double latitude, Double longitude, Integer radius) {

@@ -5,6 +5,7 @@ import org.example.smart_school_attendance.dto.login.LoginRequestDTO;
 import org.example.smart_school_attendance.dto.security.UserAuthDto;
 import org.example.smart_school_attendance.dto.user.request.PublicRegisterRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
+import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.example.smart_school_attendance.security.jwt.JwtService;
 import org.example.smart_school_attendance.service.auth.AuthService;
 import org.example.smart_school_attendance.service.user.UserService;
@@ -43,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
         return jwtService.generateTokenUser(user);
     }
 
-
     @Override
     @Transactional
     public String registration(PublicRegisterRequestDTO publicRegisterRequestDTO) {
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserDetailsResponseDTO user = userService.create(publicRegisterRequestDTO);
 
-        UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role());
+        UserAuthDto userAuthDto = new UserAuthDto(user.id(), user.email(), user.role(), UserStatus.PENDING);
 
         log.info("User with email: {}, ID: {}, Role: {} successfully registered"
                 , user.email(), user.id(), user.role().name().toUpperCase());

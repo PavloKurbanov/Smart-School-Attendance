@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.example.smart_school_attendance.dto.user.request.AdminCreateUserRequestDTO;
 import org.example.smart_school_attendance.dto.user.response.UserDetailsResponseDTO;
 import org.example.smart_school_attendance.dto.user.response.UserListResponseDTO;
+import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,5 +44,13 @@ public class UserController {
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
         return userService.findAll(pageable);
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public void updateStatus(
+            @PathVariable Long id,
+            @RequestParam UserStatus status) {
+        userService.updateStatus(id, status);
     }
 }

@@ -26,7 +26,7 @@ public class SchoolController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public SchoolDetailsResponseDTO create(
             @RequestBody @Valid SchoolCreateRequestTO createDetailsDTO) {
         return schoolService.create(createDetailsDTO);
@@ -34,7 +34,7 @@ public class SchoolController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public SchoolDetailsResponseDTO findById(
             @PathVariable Long id) {
         return schoolService.findById(id);
@@ -42,14 +42,14 @@ public class SchoolController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public Page<SchoolDetailsResponseDTO> findAll(Pageable pageable) {
         return schoolService.findAll(pageable);
     }
 
     @GetMapping("/search/name")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public SchoolDetailsResponseDTO findByName(
             @RequestParam String name) {
         return schoolService.findByName(name);
@@ -57,7 +57,7 @@ public class SchoolController {
 
     @GetMapping("/search/email")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public SchoolDetailsResponseDTO findByEmail(
             @RequestParam String email) {
         return schoolService.findByEmail(email);
@@ -65,7 +65,7 @@ public class SchoolController {
 
     @GetMapping("/search/phone")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'SCHOOL_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public SchoolDetailsResponseDTO findByPhone(
             @RequestParam String phone) {
         return schoolService.findByPhoneNumber(phone);

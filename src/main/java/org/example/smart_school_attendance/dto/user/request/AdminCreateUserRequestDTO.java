@@ -16,5 +16,5 @@ public record AdminCreateUserRequestDTO(
         @NotBlank String password,
         @NotNull Role role,
         Long schoolId
-        ) implements UserRegistrationRequest {
+) implements UserRegistrationRequest {
 }

@@ -53,19 +53,22 @@ public class UserUpdateServiceImpl implements UserUpdateService {
     @Override
     @Transactional
     public void changeEmail(Long userId, UserChangeEmailRequestDTO request) {
-        if(userId == null || userId <= 0) {
+        if (userId == null || userId <= 0) {
             throw new IllegalArgumentException("User ID can't be null or less than 0");
         }
 
         if (request.email() == null || !request.email().contains("@") || !request.email().contains(".") || request.email().isBlank()) {
             throw new IllegalArgumentException("New Email must be valid and not blank");
         }
-
         log.info("Attempting to change email for user with id: {} to new email: {}", userId, request.email());
 
         hasAccess(userId);
 
         User user = userService.entityById(userId);
+
+        if (Objects.equals(user.getEmail(), request.email())) {
+            throw new IllegalArgumentException("New email is the same as the current email");
+        }
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new IllegalArgumentException("Current passwords do not match");
@@ -109,9 +112,9 @@ public class UserUpdateServiceImpl implements UserUpdateService {
     }
 
     private void hasAccess(Long userId) {
-        SecurityUser currentUser = securityService.getCurrentUser();
+        Long currentUserId = securityService.getCurrentUserId();
 
-        if(!Objects.equals(currentUser.getId(), userId)) {
+        if (!Objects.equals(currentUserId, userId)) {
             throw new AccessDeniedException("Access denied: You do not have permission to update user with ID: " + userId);
         }
     }

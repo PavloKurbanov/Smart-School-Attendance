@@ -39,7 +39,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .addClaims(Map.of("userId", user.id(), "email", user.email(), "role", user.role().name().toUpperCase(), "activated", user.status().name().toUpperCase()))
+                .addClaims(Map.of("userId", user.id(), "email", user.email(), "role", user.role().name().toUpperCase(), "active", user.status().name().toUpperCase()))
                 .compact();
     }
 
@@ -55,8 +55,8 @@ public class JwtService {
     public boolean isUserActivated(String token) {
         JwtParser jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
         Claims claims = jwtParser.parseClaimsJws(token).getBody();
-        String activatedClaim = claims.get("activated", String.class);
-        return activatedClaim != null && activatedClaim.equalsIgnoreCase("ACTIVATED");
+        String activeClaim = claims.get("active", String.class);
+        return activeClaim != null && activeClaim.equalsIgnoreCase("ACTIVE");
     }
 
     private boolean isTokenExpired(String token) {

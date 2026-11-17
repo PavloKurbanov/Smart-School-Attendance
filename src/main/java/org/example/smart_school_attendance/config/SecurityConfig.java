@@ -48,29 +48,29 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(usersDetailsService);
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            JwtAuthenticationFilter filter) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                HttpSecurity http,
+                JwtAuthenticationFilter filter) throws Exception {
 
-        http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/api/v1/**")
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            http
+                    .cors(AbstractHttpConfigurer::disable)
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .securityMatcher("/api/v1/**")
+                    .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/login", "/api/v1/register").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasRole("SYSTEM_ADMIN")
-                        .requestMatchers("/api/v1/users/**").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .authenticationProvider(userAuthenticationProvider(userDetailsService()))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/api/v1/login", "/api/v1/register").permitAll()
+                            .requestMatchers("/api/v1/admin/**").hasRole("SYSTEM_ADMIN")
+                            .requestMatchers("/api/v1/users/**").authenticated()
+                            .anyRequest().authenticated()
+                    )
+                    .httpBasic(AbstractHttpConfigurer::disable)
+                    .authenticationProvider(userAuthenticationProvider(userDetailsService()))
+                    .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+            return http.build();
+        }
 
     @Bean
     public DaoAuthenticationProvider userAuthenticationProvider(UsersDetailsService usersDetailsService) {

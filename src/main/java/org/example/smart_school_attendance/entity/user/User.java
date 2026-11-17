@@ -58,7 +58,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
 
     @NotNull

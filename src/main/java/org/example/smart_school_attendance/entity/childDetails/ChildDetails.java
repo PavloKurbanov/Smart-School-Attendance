@@ -2,11 +2,10 @@ package org.example.smart_school_attendance.entity.childDetails;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.example.smart_school_attendance.entity.school.classRoom.ClassRoom;
 import org.example.smart_school_attendance.entity.school.School;
+import org.example.smart_school_attendance.entity.school.classRoom.ClassRoom;
 import org.example.smart_school_attendance.entity.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -39,7 +38,7 @@ public class ChildDetails {
             joinColumns = @JoinColumn(name = "child_id"),
             inverseJoinColumns = @JoinColumn(name = "parent_id")
     )
-    private List<User> parents = new ArrayList<>();
+    private List<User> parents;
 
     public ChildDetails(User child, School school, ClassRoom classRoom, List<User> parents) {
         this.child = child;
@@ -48,5 +47,6 @@ public class ChildDetails {
         this.parents = parents;
     }
 
-    public ChildDetails() {}
+    public ChildDetails() {
+    }
 }

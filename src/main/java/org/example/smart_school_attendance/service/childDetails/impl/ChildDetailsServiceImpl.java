@@ -7,6 +7,7 @@ import org.example.smart_school_attendance.repository.ChildDetailsRepository;
 import org.example.smart_school_attendance.service.childDetails.ChildDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -20,6 +21,7 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
     }
 
     @Override
+    @Transactional
     public ChildDetails createChildDetails(CreateChildDetailsRequestDTO request) {
         if(request == null){
             throw new IllegalArgumentException("Create Child details can't be null");

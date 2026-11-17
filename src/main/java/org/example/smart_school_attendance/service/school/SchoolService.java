@@ -23,4 +23,8 @@ public interface SchoolService {
     Page<SchoolDetailsResponseDTO> findAll(Pageable pageable);
 
     School entityById(Long id);
+
+    boolean existByEmail(String email);
+
+    boolean existByPhone(String phoneNumber);
 }

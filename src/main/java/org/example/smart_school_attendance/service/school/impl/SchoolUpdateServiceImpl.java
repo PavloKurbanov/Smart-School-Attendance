@@ -8,6 +8,7 @@ import org.example.smart_school_attendance.security.SecurityUser;
 import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.example.smart_school_attendance.service.school.SchoolUpdateService;
+import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,13 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
 
     private final SchoolService schoolService;
     private final SecurityService securityService;
+    private final UserService userService;
 
     @Autowired
-    public SchoolUpdateServiceImpl(SchoolService schoolService, SecurityService securityService) {
+    public SchoolUpdateServiceImpl(SchoolService schoolService, SecurityService securityService, UserService userService) {
         this.schoolService = schoolService;
         this.securityService = securityService;
+        this.userService = userService;
     }
 
 
@@ -38,6 +41,14 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
                 !schoolChangeEmailRequestDTO.newEmail().contains(".") ||
                 schoolChangeEmailRequestDTO.newEmail().isBlank()) {
             throw new IllegalArgumentException("New Email must be valid and not blank");
+        }
+
+        if(schoolService.existByEmail(schoolChangeEmailRequestDTO.newEmail())) {
+            throw new IllegalArgumentException("Email " + schoolChangeEmailRequestDTO.newEmail() + " already exists");
+        }
+
+        if(schoolService.existByEmail(schoolChangeEmailRequestDTO.newEmail())) {
+            throw new IllegalArgumentException("Email " + schoolChangeEmailRequestDTO.newEmail() + " already exists");
         }
 
         validateAccessToSchoolUpdate(id);
@@ -56,6 +67,10 @@ public class SchoolUpdateServiceImpl implements SchoolUpdateService {
 
         if (schoolChangePhoneRequestDTO == null || schoolChangePhoneRequestDTO.newPhoneNumber() == null || schoolChangePhoneRequestDTO.newPhoneNumber().isBlank()) {
             throw new IllegalArgumentException("New Phone Number must not be blank");
+        }
+
+        if(schoolService.existByPhone(schoolChangePhoneRequestDTO.newPhoneNumber())) {
+            throw new IllegalArgumentException("Phone number " + schoolChangePhoneRequestDTO.newPhoneNumber() + " already exists");
         }
 
         validateAccessToSchoolUpdate(id);

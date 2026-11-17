@@ -154,4 +154,20 @@ public class SchoolServiceImpl implements SchoolService {
         return schoolRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("School with ID: " + id + " not found"));
     }
+
+    @Override
+    public boolean existByEmail(String email) {
+        if(email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email can't be null or blank");
+        }
+        return schoolRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existByPhone(String phoneNumber) {
+        if(phoneNumber == null || phoneNumber.isBlank()) {
+            throw new IllegalArgumentException("Phone number can't be null or blank");
+        }
+        return schoolRepository.existsByPhoneNumber(phoneNumber);
+    }
 }

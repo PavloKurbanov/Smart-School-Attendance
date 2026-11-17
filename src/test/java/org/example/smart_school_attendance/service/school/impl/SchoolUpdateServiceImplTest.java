@@ -3,6 +3,7 @@ package org.example.smart_school_attendance.service.school.impl;
 import org.example.smart_school_attendance.dto.school.request.SchoolChangeEmailRequestDTO;
 import org.example.smart_school_attendance.security.service.SecurityService;
 import org.example.smart_school_attendance.service.school.SchoolService;
+import org.example.smart_school_attendance.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -15,7 +16,8 @@ class SchoolUpdateServiceImplTest {
     public SchoolUpdateServiceImplTest() {
         SchoolService schoolService = Mockito.mock(SchoolService.class);
         SecurityService securityService = Mockito.mock(SecurityService.class);
-        schoolUpdateService = new SchoolUpdateServiceImpl(schoolService, securityService);
+        UserService userService = Mockito.mock(UserService.class);
+        schoolUpdateService = new SchoolUpdateServiceImpl(schoolService, securityService, userService);
     }
 
     @Test

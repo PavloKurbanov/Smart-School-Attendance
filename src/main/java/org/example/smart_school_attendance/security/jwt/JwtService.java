@@ -1,0 +1,73 @@
+package org.example.smart_school_attendance.security.jwt;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.example.smart_school_attendance.dto.security.UserAuthDto;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.Map;
+
+@Slf4j
+public class JwtService {
+    private static final String SECRET_KEY = "9a72df6554c123456789abcdef0123456789abcdef0123456789abcdef012345";
+    public static final long EXPIRATION_TIME = 86400000;
+
+    public String extractUserName(String token) {
+        return extractClaim(token, null);
+    }
+
+    public String extractClaim(String token, String claimName) {
+        JwtParser jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+
+        if (claimName == null) {
+            return claims.getSubject();
+        }
+        return claims.get(claimName).toString();
+    }
+
+    public String generateTokenUser(UserAuthDto user) {
+        return Jwts.builder()
+                .setSubject(user.email())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .addClaims(Map.of("userId", user.id(), "email", user.email(), "role", user.role().name().toUpperCase(), "active", user.status().name().toUpperCase()))
+                .compact();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        if(!isUserActivated(token)) {
+            log.warn("Token is not valid because the user is not activated.");
+            return false;
+        }
+        final String username = extractUserName(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isUserActivated(String token) {
+        JwtParser jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        String activeClaim = claims.get("active", String.class);
+        return activeClaim != null && activeClaim.equalsIgnoreCase("ACTIVE");
+    }
+
+    private boolean isTokenExpired(String token) {
+        JwtParser jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
+        Claims claim = jwtParser.parseClaimsJws(token).getBody();
+        Date expiration = claim.getExpiration();
+        return expiration.before(new Date());
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+}

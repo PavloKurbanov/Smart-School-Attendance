@@ -25,6 +25,7 @@ src/main/java/org/example/smart_school_attendance
 ├── mapper/       # Entity <-> DTO mappers
 ├── repository/   # Spring Data JPA repositories
 └── service/      # Business logic and @Transactional services
+```text
 Prerequisites
 JDK (matching the project's Gradle/Java configuration)
 
@@ -35,21 +36,27 @@ Gradle (or Gradle Wrapper ./gradlew)
 Database Configuration
 Create a MySQL database (for example, smart_school_attendance) and configure your datasource properties in src/main/resources/application.properties or application.yml:
 
+```text
 Properties
 spring.datasource.url=jdbc:mysql://localhost:3306/smart_school_attendance
 spring.datasource.username=your_db_username
 spring.datasource.password=your_db_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+```text
 Running the Application
 Run the project with Gradle:
 
+```text
 Bash
 ./gradlew bootRun
+```text
 Or on Windows:
 
 Bash
+```text
 gradlew.bat bootRun
+```text
 Current Status & Next Steps
 Core domain model (User, Role, school/classroom/child associations), DTOs, mappers, repositories, and transactional service methods are actively being developed.
 

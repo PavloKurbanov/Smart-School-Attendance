@@ -39,7 +39,7 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
                 request.childId(),
                 request.schoolId(),
                 request.classRoomId(),
-                new ArrayList<>(request.parentIds()));
+                //new ArrayList<>(request.parentIds()));
 
         childDetailsRepository.save(childDetails);
         return childDetailsMapper.toChildDetailsResponseDTO(childDetails);

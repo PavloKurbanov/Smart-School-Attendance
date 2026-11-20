@@ -28,6 +28,8 @@ public class ClassRoom {
     @JoinColumn(name = "school_id")
     private School school;
 
+    private Integer capacity;
+
     public ClassRoom(String name, List<ChildDetails> children, User teacher, School school) {
         this.name = name;
         this.children = children;

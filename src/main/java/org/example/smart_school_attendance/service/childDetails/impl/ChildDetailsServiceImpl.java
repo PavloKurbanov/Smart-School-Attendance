@@ -1,10 +1,11 @@
 package org.example.smart_school_attendance.service.childDetails.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.smart_school_attendance.dto.childDetails.ChildDetailsResponseDTO;
-import org.example.smart_school_attendance.dto.childDetails.CreateChildDetailsRequestDTO;
+import org.example.smart_school_attendance.dto.childDetails.response.ChildDetailsResponseDTO;
+import org.example.smart_school_attendance.dto.childDetails.request.CreateChildDetailsRequestDTO;
 import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.entity.school.School;
+import org.example.smart_school_attendance.entity.school.classRoom.ClassRoom;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.ChildDetailsMapper;
 import org.example.smart_school_attendance.repository.ChildDetailsRepository;
@@ -14,11 +15,6 @@ import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,11 +46,13 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
 
         School school = schoolService.entityById(request.schoolId());
 
+        ClassRoom classRoom = new ClassRoom();
+
 
         ChildDetails childDetails = new ChildDetails(
                 child,
                 school,
-                request.classRoomId(),
+                classRoom,
                 userService.findAllByIds(request.parentIds())
         );
 

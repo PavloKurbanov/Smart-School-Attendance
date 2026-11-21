@@ -5,4 +5,5 @@ import org.example.smart_school_attendance.dto.childDetails.request.CreateChildD
 
 public interface ChildDetailsService {
     ChildDetailsResponseDTO createChildDetails(CreateChildDetailsRequestDTO request);
+    Long countChildrenByClassRoomId(Long classRoomId);
 }

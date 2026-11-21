@@ -6,6 +6,7 @@ import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
@@ -18,23 +19,24 @@ public class ClassRoom {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classRoom")
-    private List<ChildDetails> children;
+    private List<ChildDetails> children = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
 
     private Integer capacity;
 
-    public ClassRoom(String name, List<ChildDetails> children, User teacher, School school) {
+    public ClassRoom(String name, List<ChildDetails> children, User teacher, School school, Integer capacity) {
         this.name = name;
         this.children = children;
         this.teacher = teacher;
         this.school = school;
+        this.capacity = capacity;
     }
 
     public ClassRoom() {}

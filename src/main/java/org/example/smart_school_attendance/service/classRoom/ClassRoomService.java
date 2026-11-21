@@ -5,6 +5,5 @@ import org.example.smart_school_attendance.dto.classRoom.CreateClassRoomRequestD
 
 public interface ClassRoomService {
     ClassRoomDetailsResponseDTO createClassRoom(CreateClassRoomRequestDTO request);
-
-
+    ClassRoomDetailsResponseDTO getClassRoomById(Long id);
 }

@@ -59,4 +59,13 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
         childDetailsRepository.save(childDetails);
         return childDetailsMapper.toChildDetailsResponseDTO(childDetails);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countChildrenByClassRoomId(Long classRoomId) {
+        if (classRoomId == null) {
+            throw new IllegalArgumentException("Class room id can't be null");
+        }
+        return childDetailsRepository.countByClassRoomId(classRoomId);
+    }
 }

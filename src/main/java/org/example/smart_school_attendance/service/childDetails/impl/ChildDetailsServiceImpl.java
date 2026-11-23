@@ -10,11 +10,14 @@ import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.ChildDetailsMapper;
 import org.example.smart_school_attendance.repository.ChildDetailsRepository;
 import org.example.smart_school_attendance.service.childDetails.ChildDetailsService;
+import org.example.smart_school_attendance.service.classRoom.ClassRoomService;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,13 +27,16 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
     private final ChildDetailsMapper childDetailsMapper;
     private final UserService userService;
     private final SchoolService schoolService;
+    private final ClassRoomService classRoomService;
 
     @Autowired
-    public ChildDetailsServiceImpl(ChildDetailsRepository childDetailsRepository, ChildDetailsMapper childDetailsMapper, UserService userService, SchoolService schoolService) {
+    public ChildDetailsServiceImpl(ChildDetailsRepository childDetailsRepository, ChildDetailsMapper childDetailsMapper
+            , UserService userService, SchoolService schoolService, ClassRoomService classRoomService) {
         this.childDetailsRepository = childDetailsRepository;
         this.childDetailsMapper = childDetailsMapper;
         this.userService = userService;
         this.schoolService = schoolService;
+        this.classRoomService = classRoomService;
     }
 
     @Override
@@ -46,8 +52,7 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
 
         School school = schoolService.entityById(request.schoolId());
 
-        ClassRoom classRoom = new ClassRoom();
-
+        ClassRoom classRoom = classRoomService.entityById(request.classRoomId());
 
         ChildDetails childDetails = new ChildDetails(
                 child,
@@ -62,10 +67,10 @@ public class ChildDetailsServiceImpl implements ChildDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long countChildrenByClassRoomId(Long classRoomId) {
-        if (classRoomId == null) {
-            throw new IllegalArgumentException("Class room id can't be null");
+    public List<ChildDetails> findAllById(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
         }
-        return childDetailsRepository.countByClassRoomId(classRoomId);
+        return childDetailsRepository.findAllById(ids);
     }
 }

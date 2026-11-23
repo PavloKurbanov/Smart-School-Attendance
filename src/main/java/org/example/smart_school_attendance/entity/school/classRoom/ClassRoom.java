@@ -1,11 +1,13 @@
 package org.example.smart_school_attendance.entity.school.classRoom;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -29,7 +31,18 @@ public class ClassRoom {
     @JoinColumn(name = "school_id")
     private School school;
 
+    @Column(name = "capacity")
+    @NotNull
     private Integer capacity;
+
+    @Column(name = "create_date", nullable = false, updatable = false)
+    @NotNull
+    private LocalDateTime createDate;
+
+    @Column(name = "update_date", nullable = false)
+    @NotNull
+    private LocalDateTime updateDate;
+
 
     public ClassRoom(String name, List<ChildDetails> children, User teacher, School school, Integer capacity) {
         this.name = name;
@@ -40,4 +53,15 @@ public class ClassRoom {
     }
 
     public ClassRoom() {}
+
+    @PrePersist
+    public void prePersist() {
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updateDate = LocalDateTime.now();
+    }
 }

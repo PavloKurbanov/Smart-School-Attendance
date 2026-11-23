@@ -1,11 +1,13 @@
 package org.example.smart_school_attendance.entity.childDetails;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.school.classRoom.ClassRoom;
 import org.example.smart_school_attendance.entity.user.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -40,13 +42,34 @@ public class ChildDetails {
     )
     private List<User> parents;
 
+    @Column(name = "create_date", nullable = false, updatable = false)
+    @NotNull
+    private LocalDateTime createDate;
+
+    @Column(name = "update_date", nullable = false)
+    @NotNull
+    private LocalDateTime updateDate;
+
     public ChildDetails(User child, School school, ClassRoom classRoom, List<User> parents) {
         this.child = child;
         this.school = school;
         this.classRoom = classRoom;
         this.parents = parents;
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
     public ChildDetails() {
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updateDate = LocalDateTime.now();
     }
 }

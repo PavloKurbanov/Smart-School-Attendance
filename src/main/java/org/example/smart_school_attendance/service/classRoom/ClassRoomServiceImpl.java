@@ -103,6 +103,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassRoomDetailsResponseDTO getClassRoomById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Class room id can't be less than 0");
@@ -112,6 +113,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassRoom entityById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Class room id can't be less than 0");
@@ -119,4 +121,6 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         return classRoomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Class room with id: " + id + " not found"));
     }
+
+
 }

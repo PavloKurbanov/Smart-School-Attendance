@@ -1,0 +1,42 @@
+# Run the app with MySQL:   docker compose up --build
+# Run the tests (H2):       docker compose run --rm tests
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: smart_school_attendance
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - "3307:3306"   # 3307 on the host so it does not clash with a local MySQL
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      target: runtime
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_school_attendance?serverTimezone=UTC&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - "8080:8080"
+
+  tests:
+    build:
+      context: .
+      target: build
+    profiles: ["test"]   # not started by `docker compose up`
+    volumes:
+      - ./build/docker-test-reports:/app/build/reports
+
+volumes:
+  mysql-data:

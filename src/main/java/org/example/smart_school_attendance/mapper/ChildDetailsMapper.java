@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ChildDetailsMapper {
-    @Mapping(target = "childName", expression = "java(maoChildName(childDetails.getChild()))")
+    @Mapping(target = "childName", expression = "java(mapChildName(childDetails.getChild()))")
     @Mapping(target = "schoolName", source = "school.name")
     @Mapping(target = "classRoomName", source = "classRoom.name")
     @Mapping(target = "parentsNames", expression = "java(mapParents(childDetails.getParents()))")

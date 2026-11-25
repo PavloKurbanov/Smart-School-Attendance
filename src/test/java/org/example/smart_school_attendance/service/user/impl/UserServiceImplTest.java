@@ -5,6 +5,7 @@ import org.example.smart_school_attendance.dto.user.response.UserDetailsResponse
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
+import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.example.smart_school_attendance.mapper.UserMapper;
 import org.example.smart_school_attendance.repository.UserRepository;
 import org.example.smart_school_attendance.service.school.SchoolService;
@@ -50,7 +51,7 @@ class UserServiceImplTest {
 
         Mockito.when(userMapper.toUserDetailsResponseDTO(Mockito.any(User.class))).thenReturn(new UserDetailsResponseDTO(
                 1L, "Pavlo", "Kurbanov", 24, "kurbanovpavlo@gmail.com", "+380981221493"
-                ,  Role.SCHOOL_ADMIN, LocalDateTime.now(), LocalDateTime.now()
+                ,  Role.SCHOOL_ADMIN, UserStatus.PENDING, LocalDateTime.now(), LocalDateTime.now()
         ));
 
         UserDetailsResponseDTO userByAdmin = userService.createUserByAdmin(requestDTO);

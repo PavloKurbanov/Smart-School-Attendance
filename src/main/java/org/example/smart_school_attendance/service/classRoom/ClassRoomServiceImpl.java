@@ -10,7 +10,7 @@ import org.example.smart_school_attendance.entity.user.Role;
 import org.example.smart_school_attendance.entity.user.User;
 import org.example.smart_school_attendance.mapper.ClassRoomMapper;
 import org.example.smart_school_attendance.repository.ClassRoomRepository;
-import org.example.smart_school_attendance.service.childDetails.ChildDetailsService;
+import org.example.smart_school_attendance.repository.ChildDetailsRepository;
 import org.example.smart_school_attendance.service.school.SchoolService;
 import org.example.smart_school_attendance.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +30,16 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     private final ClassRoomMapper classRoomMapper;
     private final UserService userService;
     private final SchoolService schoolService;
-    private final ChildDetailsService childDetailsService;
+    private final ChildDetailsRepository childDetailsRepository;
 
 
     @Autowired
-    public ClassRoomServiceImpl(ClassRoomRepository classRoomRepository, ClassRoomMapper classRoomMapper, UserService userService, SchoolService schoolService, ChildDetailsService childDetailsService) {
+    public ClassRoomServiceImpl(ClassRoomRepository classRoomRepository, ClassRoomMapper classRoomMapper, UserService userService, SchoolService schoolService, ChildDetailsRepository childDetailsRepository) {
         this.classRoomRepository = classRoomRepository;
         this.classRoomMapper = classRoomMapper;
         this.userService = userService;
         this.schoolService = schoolService;
-        this.childDetailsService = childDetailsService;
+        this.childDetailsRepository = childDetailsRepository;
     }
 
     @Override
@@ -65,7 +65,10 @@ public class ClassRoomServiceImpl implements ClassRoomService {
 
         School school = schoolService.entityById(request.schoolId());
 
-        List<ChildDetails> foundChildren = childDetailsService.findAllById(request.children());
+        // Repository instead of ChildDetailsService: ChildDetailsService depends on ClassRoomService (bean cycle).
+        List<ChildDetails> foundChildren = request.children() == null || request.children().isEmpty()
+                ? List.of()
+                : childDetailsRepository.findAllById(request.children());
 
         if (request.children() != null && !request.children().isEmpty()) {
             Set<Long> foundIds = foundChildren.stream()

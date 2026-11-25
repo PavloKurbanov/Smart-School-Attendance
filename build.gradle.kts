@@ -60,10 +60,20 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("com.h2database:h2")
 
     implementation("com.mysql:mysql-connector-j:9.0.0")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+// Single executable jar with a fixed name (used by the Dockerfile)
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    archiveFileName = "app.jar"
+}
+
+tasks.named<Jar>("jar") {
+    enabled = false
 }

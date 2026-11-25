@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChildDetailsRepository extends JpaRepository<ChildDetails, Long> {
+    long countByClassRoomId(Long classRoomId);
 
 //    @Query("SELECT c.parents FROM ChildDetails c WHERE c.email = :email")
 //    List<User> findParentsByChildEmail(@Param("email") String email);

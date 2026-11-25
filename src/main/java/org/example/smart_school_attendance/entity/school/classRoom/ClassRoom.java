@@ -1,11 +1,14 @@
 package org.example.smart_school_attendance.entity.school.classRoom;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.smart_school_attendance.entity.childDetails.ChildDetails;
 import org.example.smart_school_attendance.entity.school.School;
 import org.example.smart_school_attendance.entity.user.User;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
@@ -18,22 +21,47 @@ public class ClassRoom {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classRoom")
-    private List<ChildDetails> children;
+    private List<ChildDetails> children = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
 
-    public ClassRoom(String name, List<ChildDetails> children, User teacher, School school) {
+    @Column(name = "capacity")
+    @NotNull
+    private Integer capacity;
+
+    @Column(name = "create_date", nullable = false, updatable = false)
+    @NotNull
+    private LocalDateTime createDate;
+
+    @Column(name = "update_date", nullable = false)
+    @NotNull
+    private LocalDateTime updateDate;
+
+
+    public ClassRoom(String name, List<ChildDetails> children, User teacher, School school, Integer capacity) {
         this.name = name;
         this.children = children;
         this.teacher = teacher;
         this.school = school;
+        this.capacity = capacity;
     }
 
     public ClassRoom() {}
+
+    @PrePersist
+    public void prePersist() {
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updateDate = LocalDateTime.now();
+    }
 }

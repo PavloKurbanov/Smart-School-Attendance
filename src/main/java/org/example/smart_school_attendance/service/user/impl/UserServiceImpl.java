@@ -23,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -199,10 +201,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateStatus(Long id, UserStatus status) {
-        if(id == null || id <= 0) {
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("User ID can't be null or less than 0");
         }
-        if(status == null) {
+        if (status == null) {
             throw new IllegalArgumentException("User status can't be null");
         }
 
@@ -210,5 +212,13 @@ public class UserServiceImpl implements UserService {
         user.setUserStatus(status);
         userRepository.save(user);
         log.info("User with ID: {} successfully updated status to: {}", id, status);
+    }
+
+    @Override
+    public List<User> findAllByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("ID users list can't be null or empty");
+        }
+        return userRepository.findAllById(ids);
     }
 }

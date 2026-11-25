@@ -65,7 +65,7 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     @Transactional
     public void update(Long schoolId, SchoolUpdateRequestDTO schoolUpdateRequestDTO) {
-        if(schoolId == null || schoolId <= 0) {
+        if (schoolId == null || schoolId <= 0) {
             throw new IllegalArgumentException("School ID can't be null or less than 0");
         }
 
@@ -157,7 +157,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public boolean existByEmail(String email) {
-        if(email == null || email.isBlank()) {
+        if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email can't be null or blank");
         }
         return schoolRepository.existsByEmail(email);
@@ -165,7 +165,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public boolean existByPhone(String phoneNumber) {
-        if(phoneNumber == null || phoneNumber.isBlank()) {
+        if (phoneNumber == null || phoneNumber.isBlank()) {
             throw new IllegalArgumentException("Phone number can't be null or blank");
         }
         return schoolRepository.existsByPhoneNumber(phoneNumber);

@@ -11,6 +11,8 @@ import org.example.smart_school_attendance.entity.user.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface UserService {
     UserDetailsResponseDTO create(PublicRegisterRequestDTO request);
 
@@ -33,4 +35,6 @@ public interface UserService {
     User entityById(Long id);
 
     void updateStatus(Long id, UserStatus status);
+
+    List<User> findAllByIds(List<Long> ids);
 }

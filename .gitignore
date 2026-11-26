@@ -200,3 +200,6 @@ README.html
 .idea
 .exercism
 /HELP.md
+
+### Gradle wrapper jar must be committed (it is excluded by *.jar above)
+!gradle/wrapper/gradle-wrapper.jar
